@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주장하는 글 쓰기 공방</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   © 2026 GEG 화성(깊이 e끌림). All rights reserved. GEGHS-DEEPE-2026
+   주장하는 글 쓰기 공방 — 국어 6-1 5단원 「자신의 글쓰기 과정을 살펴봐요」
+   ============================================================ */
+:root{
+  --ink:#33241C;          /* 잉크 */
+  --paper:#FFF7EF;        /* 공방 종이 */
+  --card:#FFFFFF;
+  --claim:#E8501F;        /* 주장 = 주홍 */
+  --claim-deep:#B93A10;
+  --claim-soft:#FFE3D6;
+  --reason:#D97706;       /* 이유 = 호박 */
+  --reason-soft:#FDECD2;
+  --evid:#0E7C6B;         /* 근거 = 청록(객관) */
+  --evid-soft:#D9F0EB;
+  --gold:#E9A319;         /* 출처 도장 = 골드 */
+  --gold-soft:#FBEFD3;
+  --line:#EAD9C9;
+  --mut:#8A6F5E;
+  --ok:#1D9E63;
+  --bad:#D6403A;
+  --r-lg:26px; --r-md:18px; --r-sm:12px;
+  --shadow:0 10px 26px rgba(120,60,20,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Jua','Noto Sans KR',sans-serif;
+  background:
+    radial-gradient(1000px 500px at 85% -10%, #FFE9D8 0%, transparent 60%),
+    radial-gradient(800px 460px at -10% 110%, #FDF0DB 0%, transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:22px; line-height:1.5;
+  min-height:100vh; overflow-x:hidden;
+}
+button{font-family:inherit;font-size:inherit;color:inherit;border:none;background:none;cursor:pointer}
+input,textarea,select{font-family:'Jua','Noto Sans KR',sans-serif;font-size:21px;color:var(--ink)}
+textarea{resize:none;line-height:1.6}
+.num{font-family:'Noto Sans KR',sans-serif;font-weight:700}
+:focus-visible{outline:4px solid #F5B58E;outline-offset:2px;border-radius:8px}
+
+/* ---------- 공통 레이아웃 ---------- */
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center;padding:18px 20px 26px;animation:fadeUp .45s ease both}
+.screen.on{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.wrap{width:100%;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:16px;flex:1}
+.topbar{width:100%;max-width:1180px;display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:6px}
+.topbar .who{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 16px;font-size:19px;box-shadow:var(--shadow)}
+.who .dot{width:12px;height:12px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+.who .dot.demo{background:var(--gold)}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 26px;border-radius:999px;font-size:22px;line-height:1;
+  background:var(--claim);color:#fff;box-shadow:0 6px 0 var(--claim-deep);
+  transition:transform .12s ease, box-shadow .12s ease, filter .15s;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--claim-deep)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:0 6px 0 var(--line);border:2px solid var(--line)}
+.btn.ghost:active{box-shadow:0 2px 0 var(--line)}
+.btn.evid{background:var(--evid);box-shadow:0 6px 0 #095A4D}
+.btn.evid:active{box-shadow:0 2px 0 #095A4D}
+.btn.gold{background:var(--gold);box-shadow:0 6px 0 #B57C0C}
+.btn.gold:active{box-shadow:0 2px 0 #B57C0C}
+.btn.small{padding:10px 18px;font-size:19px}
+.btn.big{padding:18px 40px;font-size:26px}
+.btn:disabled{filter:grayscale(.7) brightness(.95);opacity:.55;cursor:not-allowed;transform:none}
+.btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.submit-row{display:flex;gap:12px;align-items:center;margin-top:6px;padding-top:14px;border-top:2px dashed var(--line)}
+.submit-row #btnSubmit{margin-left:auto}
+@media (max-width:900px){
+  .submit-row{flex-wrap:wrap}
+  .submit-row #btnSubmit{margin-left:0;flex:1 1 100%;order:-1}
+}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:17px;line-height:1.3}
+.chip.claim{background:var(--claim-soft);color:var(--claim-deep)}
+.chip.reason{background:var(--reason-soft);color:#9A5A05}
+.chip.evid{background:var(--evid-soft);color:#0A5D50}
+.chip.gold{background:var(--gold-soft);color:#8A5F08}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:22px}
+.hint-line{display:flex;align-items:center;gap:10px;background:var(--gold-soft);border:2px dashed var(--gold);border-radius:var(--r-sm);padding:10px 16px;font-size:21px}
+.claim-banner{display:flex;align-items:center;gap:12px;background:var(--claim-soft);border:3px solid var(--claim);border-radius:var(--r-md);padding:12px 18px}
+.claim-banner .cb-tag{flex:none;background:var(--claim);color:#fff;font-size:17px;padding:5px 14px;border-radius:999px}
+.claim-banner .cb-text{font-size:21px;color:var(--claim-deep);line-height:1.4}
+.hint-line span{display:inline}
+.hidden{display:none !important}
+
+/* ---------- 시작 화면 ---------- */
+#scr-start{justify-content:center;text-align:center}
+.hero-stamp{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 14px;position:relative;
+  background:radial-gradient(circle at 32% 28%, #FF7A45, var(--claim) 62%, var(--claim-deep));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px;
+  box-shadow:0 14px 34px rgba(232,80,31,.4), inset 0 -8px 0 rgba(0,0,0,.12);
+  animation:stampIn .8s cubic-bezier(.2,1.6,.4,1) both;
+}
+.hero-stamp::after{content:'';position:absolute;inset:10px;border:3px dashed rgba(255,255,255,.65);border-radius:50%}
+@keyframes stampIn{0%{transform:scale(2.2) rotate(-14deg);opacity:0}60%{transform:scale(.94) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+.app-title{font-size:52px;line-height:1.15;letter-spacing:-1px}
+.app-title em{font-style:normal;color:var(--claim)}
+.app-sub{font-size:21px;color:var(--mut);margin-top:6px}
+.start-panel{margin-top:26px;display:flex;flex-direction:column;gap:14px;align-items:center;width:min(560px,100%)}
+.name-pick{display:flex;gap:10px;width:100%;justify-content:center}
+.name-pick select{
+  flex:1;max-width:340px;padding:14px 18px;border-radius:var(--r-md);border:3px solid var(--claim);
+  background:var(--card);font-size:23px;box-shadow:var(--shadow);
+}
+.mode-banner{
+  width:100%;background:var(--gold-soft);border:2px solid var(--gold);border-radius:var(--r-md);
+  padding:12px 18px;font-size:19px;color:#7A5406;
+}
+.mode-banner span{display:inline}
+.teacher-toggle{font-size:18px;color:var(--mut);text-decoration:underline;margin-top:2px}
+.teacher-panel{width:100%;background:#F6F1FB;border:2px solid #CBB6E8;border-radius:var(--r-md);padding:18px;display:flex;flex-direction:column;gap:12px;text-align:left}
+.teacher-panel h3{font-size:22px;color:#5E35B1}
+.teacher-panel input{width:100%;padding:12px 14px;border:2px solid #CBB6E8;border-radius:var(--r-sm);font-size:18px;background:#fff}
+.teacher-panel .linkbox{background:#fff;border:2px dashed #CBB6E8;border-radius:var(--r-sm);padding:10px 12px;font-size:16px;word-break:break-all;font-family:'Noto Sans KR',sans-serif}
+.teacher-panel .msg{font-size:18px}
+.start-note{font-size:17px;color:var(--mut)}
+
+/* ---------- 홈 화면 ---------- */
+.home-head{display:flex;flex-direction:column;gap:4px;text-align:center}
+.home-head h1{font-size:38px}
+.home-head h1 b{color:var(--claim)}
+.inquiry-banner{
+  width:100%;display:flex;align-items:center;gap:14px;text-align:left;
+  background:linear-gradient(120deg,#FFF3EC,#FFFDF8);border:3px solid var(--claim);border-radius:var(--r-lg);
+  padding:16px 22px;box-shadow:var(--shadow);transition:transform .15s;
+}
+.inquiry-banner:hover{transform:translateY(-3px)}
+.inquiry-banner .iq-icon{flex:none;font-size:34px}
+.inquiry-banner .iq-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.inquiry-banner .iq-label{font-size:17px;color:var(--claim-deep)}
+.inquiry-banner .iq-q{font-size:23px;line-height:1.4;color:var(--ink)}
+.inquiry-banner .iq-state{flex:none;font-size:17px;border-radius:999px;padding:7px 16px}
+.inquiry-banner .iq-state.todo{background:var(--claim);color:#fff;animation:pulse 1.6s ease infinite}
+.inquiry-banner .iq-state.done{background:#E2F5EA;color:#12814E;border:2px solid #12814E}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.act-card{
+  position:relative;background:var(--card);border:3px solid var(--line);border-radius:var(--r-lg);
+  padding:26px 22px 22px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;
+  box-shadow:var(--shadow);transition:transform .18s ease, border-color .18s;cursor:pointer;
+}
+.act-card:hover{transform:translateY(-6px);border-color:var(--claim)}
+.act-card .icon{font-size:52px;line-height:1;filter:drop-shadow(0 4px 6px rgba(120,60,20,.2))}
+.act-card h2{font-size:27px}
+.act-card p{font-size:18px;color:var(--mut);line-height:1.45}
+.badge{
+  position:absolute;top:-14px;right:14px;padding:6px 14px;border-radius:999px;font-size:16px;
+  background:#EFE7DD;color:var(--mut);border:2px solid var(--line);
+}
+.badge.doing{background:var(--gold-soft);color:#8A5F08;border-color:var(--gold)}
+.badge.done{background:var(--ok);color:#fff;border-color:#12814E;animation:pop .5s cubic-bezier(.2,1.8,.4,1)}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.home-foot{display:flex;justify-content:center;gap:12px;margin-top:auto}
+
+/* ---------- 개념 탐험 ---------- */
+.page-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.page-head h1{font-size:34px}
+.page-head .spacer{flex:1}
+.concept-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.concept-card{
+  background:var(--card);border:3px solid var(--line);border-radius:var(--r-lg);padding:22px;
+  display:flex;align-items:center;gap:16px;cursor:pointer;box-shadow:var(--shadow);
+  transition:transform .15s, border-color .15s;text-align:left;
+}
+.concept-card:hover{transform:translateY(-4px);border-color:var(--claim)}
+.concept-card .cnum{
+  width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:#fff;flex:none;
+}
+.concept-card .ctxt{flex:1}
+.concept-card .ctxt h3{font-size:24px}
+.concept-card .ctxt p{font-size:17px;color:var(--mut)}
+.concept-card .cstate{font-size:26px;flex:none}
+.concept-card.done{border-color:var(--ok);background:#F2FBF6}
+
+/* 개념 팝업 안 활동 */
+.fold-btn{align-self:flex-start;background:var(--gold-soft);border:2px solid var(--gold);border-radius:999px;padding:7px 16px;font-size:17px;color:#8A5E06;margin-bottom:4px}
+.fold-btn:hover{transform:translateY(-2px)}
+.lesson-text{background:var(--paper);border:2px solid var(--line);border-radius:var(--r-md);padding:18px 20px;font-size:23px;line-height:1.7}
+.slot-board{display:flex;flex-direction:column;gap:10px}
+.slot{
+  border:3px dashed var(--line);border-radius:var(--r-md);min-height:64px;padding:10px 14px;
+  display:flex;align-items:center;gap:10px;background:#FFFDFa;transition:border-color .15s, background .15s;
+}
+.slot .slot-label{font-size:19px;padding:4px 12px;border-radius:999px;color:#fff;flex:none}
+.slot.want{border-color:var(--claim);background:var(--claim-soft)}
+.slot.filled{border-style:solid;border-color:var(--ok);background:#F2FBF6}
+.piece{
+  background:var(--card);border:2px solid var(--line);border-radius:var(--r-sm);padding:10px 14px;
+  font-size:18px;line-height:1.45;cursor:pointer;box-shadow:0 4px 0 var(--line);text-align:left;
+  transition:transform .12s, border-color .12s;
+}
+.piece:hover{transform:translateY(-3px)}
+.piece.sel{border-color:var(--claim);box-shadow:0 4px 0 var(--claim);background:var(--claim-soft)}
+.piece.used{opacity:.35;pointer-events:none}
+.piece-bank{display:flex;flex-direction:column;gap:8px}
+@keyframes shake{0%,100%{transform:none}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(5px)}}
+.shake{animation:shake .45s ease}
+
+/* ---------- 근거 탐정 (퀴즈) ---------- */
+.quiz-stage{display:flex;flex-direction:column;gap:16px;max-width:860px;margin:0 auto;width:100%}
+.quiz-progress{display:flex;gap:8px;justify-content:center}
+.qdot{width:16px;height:16px;border-radius:50%;background:#EBDCCB;transition:all .2s}
+.qdot.now{background:var(--claim);transform:scale(1.3)}
+.qdot.good{background:var(--ok)}
+.qdot.miss{background:var(--bad)}
+.quiz-q{font-size:26px;text-align:center;line-height:1.5}
+.quiz-type{align-self:center}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{
+  background:var(--card);border:3px solid var(--line);border-radius:var(--r-md);padding:16px 18px;
+  font-size:20px;text-align:left;line-height:1.45;box-shadow:0 5px 0 var(--line);
+  transition:transform .12s, border-color .12s;display:flex;gap:10px;align-items:flex-start;
+}
+.opt:hover{transform:translateY(-3px);border-color:var(--claim)}
+.opt .on{width:34px;height:34px;border-radius:50%;background:var(--claim-soft);color:var(--claim-deep);display:flex;align-items:center;justify-content:center;flex:none;font-size:19px}
+.opt.right{border-color:var(--ok);background:#F2FBF6;box-shadow:0 5px 0 #12814E}
+.opt.wrongpick{border-color:var(--bad);background:#FDEEED;box-shadow:0 5px 0 #A93230}
+.opt:disabled{cursor:default;transform:none}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.ring-wrap svg{width:190px;height:190px}
+.ring-bg{fill:none;stroke:#F0E3D3;stroke-width:16}
+.ring-val{fill:none;stroke:var(--claim);stroke-width:16;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1.2s cubic-bezier(.3,.8,.3,1)}
+.ring-num{font-size:40px}
+.result-cols{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.weak-box{background:var(--paper);border:2px solid var(--line);border-radius:var(--r-md);padding:16px 18px;display:flex;flex-direction:column;gap:8px;font-size:20px}
+
+/* ---------- 공방 5단계 ---------- */
+.rail{display:flex;align-items:center;justify-content:center;gap:0;margin:2px 0 4px;width:100%}
+.rail .rstep{display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;padding:0 8px;background:none}
+.rail .rdot{
+  width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#EFE3D3;color:var(--mut);font-size:21px;border:3px solid var(--line);transition:all .25s;position:relative;
+}
+.rail .rname{font-size:15px;color:var(--mut);max-width:80px;text-align:center;line-height:1.15}
+.rail .rstep.now .rdot{background:var(--claim);border-color:var(--claim-deep);color:#fff;transform:scale(1.14);box-shadow:0 6px 16px rgba(232,80,31,.35)}
+.rail .rstep.now .rname{color:var(--claim-deep)}
+.rail .rstep.done .rdot{background:var(--ok);border-color:#12814E;color:#fff;cursor:pointer}
+.rail .rstep.done .rname{color:#12814E}
+.rail .rstep.lock .rdot{opacity:.6}
+.rail .rlink{width:44px;height:5px;background:var(--line);border-radius:3px;margin-bottom:22px}
+.rail .rlink.done{background:var(--ok)}
+.rebadge{
+  position:absolute;top:-10px;right:-14px;background:var(--gold);color:#fff;font-size:12px;
+  padding:3px 8px;border-radius:999px;white-space:nowrap;animation:pop .4s ease;
+}
+.step-panel{display:none;flex-direction:column;gap:16px;width:100%;animation:fadeUp .35s ease both}
+.step-panel.on{display:flex}
+.step-guide{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:var(--r-md);padding:12px 18px}
+.step-guide .gi{font-size:30px;line-height:1}
+.step-guide .gt{flex:1;font-size:21px}
+.step-guide .gt b{color:var(--claim-deep)}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:21px;display:flex;align-items:center;gap:8px}
+.field label .fnum{width:30px;height:30px;border-radius:50%;background:var(--claim);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.field input[type=text], .field textarea{
+  width:100%;border:3px solid var(--line);border-radius:var(--r-md);padding:13px 16px;background:#FFFDF7;
+  transition:border-color .15s;
+}
+.field input:focus, .field textarea:focus{border-color:var(--claim);outline:none}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* 내용 생성하기 — 이유·근거 카드 */
+.reason-list{display:flex;flex-direction:column;gap:16px}
+.rtabs{display:flex;gap:10px;margin-bottom:12px}
+.rtab{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:3px solid var(--line);border-radius:var(--r-md);padding:12px 16px;font-size:19px;background:#FFFDF8;color:var(--mut);transition:all .15s;text-align:left}
+.rtab b{color:#9A5A05;flex:none}
+.rtab .rtab-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:20px;color:var(--ink)}
+.rtab .rtab-ok{color:var(--ok);font-size:22px;flex:none}
+.rtab.on{background:var(--reason);border-color:#9A5A05;color:#fff}
+.rtab.on b,.rtab.on .rtab-t,.rtab.on .rtab-ok{color:#fff}
+.rtab.plus{flex:0 0 auto;border-style:dashed;color:#9A5A05;background:var(--gold-soft)}
+.rtab.need{border-color:var(--bad);box-shadow:0 0 0 3px rgba(179,38,30,.15)}
+@media (max-width:900px){ .rtabs{flex-wrap:wrap} .rtab{flex:1 1 100%} .rtab.plus{flex:1 1 100%} }
+.rc-because{display:flex;align-items:center;gap:10px;padding:12px 18px 0}
+.rc-because .bc-tag{flex:none;font-size:19px;color:#9A5A05;background:var(--gold-soft);border:2px solid var(--gold);border-radius:999px;padding:5px 14px}
+.rc-because input{flex:1;border:3px solid var(--line);border-radius:var(--r-sm);padding:10px 14px;background:#FFFDF7;font-size:20px}
+.rc-because input.empty{border-style:dashed;border-color:var(--reason);background:#FFF6E3}
+.rc-head input.empty{border:3px dashed var(--reason)!important;background:#FFF6E3!important}
+.reason-card.need{border-color:var(--bad);box-shadow:0 0 0 4px rgba(179,38,30,.12);animation:shake .45s ease}
+.matbar .chip.met{background:#E2F5EA;color:#12814E;border:2px solid #12814E}
+.matbar .chip.unmet{background:#FDEEED;color:var(--bad);border:2px solid var(--bad)}
+.reason-card{border:3px solid var(--reason);border-radius:var(--r-lg);background:var(--card);overflow:hidden;animation:pop .4s ease}
+.reason-card .rc-head{display:flex;align-items:center;gap:10px;background:var(--reason-soft);padding:12px 16px}
+.reason-card .rc-head .rtag{background:var(--reason);color:#fff;border-radius:999px;padding:4px 14px;font-size:18px;flex:none}
+.reason-card .rc-head input{flex:1;border:none;background:transparent;font-size:21px;padding:4px 6px;border-bottom:2px dashed rgba(154,90,5,.4)}
+.reason-card .rc-head input:focus{outline:none;border-bottom-color:var(--reason)}
+.reason-card .rc-del{font-size:20px;color:#9A5A05;flex:none}
+.rc-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.evid-card{border:2px solid var(--evid);border-radius:var(--r-md);background:#FBFFFE;position:relative;overflow:visible}
+.evid-card .ec-top{display:flex;gap:10px;align-items:flex-start;padding:12px 14px 8px}
+.evid-card textarea{flex:1;border:2px solid var(--evid-soft);border-radius:var(--r-sm);min-height:64px;padding:10px 12px;background:#fff;font-size:18px}
+.evid-card .ec-del{color:#0A5D50;font-size:18px;flex:none;padding-top:6px}
+.ec-type{display:flex;gap:8px;flex-wrap:wrap;padding:0 14px 10px}
+.type-chip{border:2px solid var(--evid-soft);border-radius:999px;padding:5px 13px;font-size:16px;background:#fff;color:#0A5D50}
+.type-chip.sel{background:var(--evid);color:#fff;border-color:var(--evid)}
+.src-zone{border-top:2px dashed var(--evid-soft);padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.src-zone .src-title{font-size:17px;color:#0A5D50;display:flex;align-items:center;gap:8px}
+.src-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.src-grid input{border:2px solid var(--evid-soft);border-radius:10px;padding:8px 10px;font-size:16px;background:#fff}
+.src-grid input:focus{border-color:var(--evid);outline:none}
+.stamp{
+  position:absolute;top:-16px;right:-10px;width:86px;height:86px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #FFCF6B, var(--gold) 60%, #C1830D);
+  color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:15px;line-height:1.15;transform:rotate(10deg);
+  box-shadow:0 8px 18px rgba(233,163,25,.45), inset 0 -5px 0 rgba(0,0,0,.14);
+  animation:stampHit .55s cubic-bezier(.2,1.7,.35,1) both;pointer-events:none;
+}
+.stamp::after{content:'';position:absolute;inset:7px;border:2px dashed rgba(255,255,255,.7);border-radius:50%}
+@keyframes stampHit{0%{transform:scale(2.4) rotate(-18deg);opacity:0}55%{transform:scale(.9) rotate(12deg);opacity:1}100%{transform:scale(1) rotate(10deg)}}
+.add-line{display:inline-flex;align-items:center;gap:6px;width:auto;align-self:flex-start;
+  border-radius:999px;padding:9px 18px;font-size:18px;transition:transform .15s;
+  background:var(--reason);color:#fff;border:none;box-shadow:0 4px 0 #9A5A05}
+.add-line:hover{transform:translateY(-2px)}
+.add-line:active{transform:translateY(2px);box-shadow:0 2px 0 #9A5A05}
+.add-line.evid{background:var(--evid);box-shadow:0 4px 0 #0A5D50}
+.add-line.evid:active{box-shadow:0 2px 0 #0A5D50}
+.matbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* 내용 조직하기 — 논리 지도 */
+.map-title{display:flex;align-items:center;gap:10px;font-size:21px;color:#7A5A2E;margin-bottom:8px}
+.field label .fnum, .map-title .fnum{width:auto;min-width:34px;padding:0 12px;border-radius:999px;font-size:16px}
+.map-card{background:var(--card);border:3px solid var(--line);border-radius:var(--r-lg);padding:14px;box-shadow:var(--shadow)}
+.map-card svg{width:100%;height:auto;display:block}
+.map-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:16px;color:var(--mut);margin-top:4px}
+.map-legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+
+/* 표현하기 */
+.write-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
+.bone-side{position:sticky;top:12px;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 24px);overflow-y:auto}
+.bone-item{width:100%;border:2px solid var(--line);border-radius:12px;background:#FFFDF8;overflow:hidden}
+.bone-item .bi-head{width:100%;text-align:left;padding:10px 13px;display:flex;flex-direction:column;gap:1px}
+.bone-item .bi-head:hover{background:rgba(0,0,0,.03)}
+.bone-item .bi-label{font-size:17px;color:var(--mut);display:flex;align-items:center;gap:6px}
+.bone-item .bi-label .arrow{margin-left:auto;font-size:14px;transition:transform .15s}
+.bone-item .bi-snip{font-size:16px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bone-item .bi-body{display:none;padding:0 10px 10px}
+.bone-item.on .bi-body{display:block}
+.bone-item.on .bi-label .arrow{transform:rotate(90deg)}
+.bone-item.on .bi-snip{display:none}
+.bone-item.claim{border-color:var(--claim);background:var(--claim-soft)} .bone-item.claim .bi-label{color:var(--claim-deep)}
+.bone-item.memo{border-style:dashed}
+.bone-item.reason{border-color:var(--reason);background:#FFF9EE} .bone-item.reason .bi-label{color:#9A5A05}
+.bone-item.on{border-width:3px;box-shadow:var(--shadow)}
+@media (max-width:900px){
+  .write-layout{grid-template-columns:1fr}
+  .bone-side{position:static;max-height:none}
+}
+.bone-list{display:flex;flex-direction:column;gap:10px;font-size:17px;margin-top:8px}
+/* 내가 조직한 내용 — 계층형 카드 */
+.bn-claim{background:var(--claim-soft);border:2px solid var(--claim);border-radius:12px;padding:10px 14px;line-height:1.45}
+.bn-claim b{color:var(--claim-deep)}
+.bn-memo{background:var(--paper);border:2px dashed var(--line);border-radius:12px;padding:9px 14px;line-height:1.45}
+.bn-memo b{color:var(--mut);font-size:16px;display:block;margin-bottom:2px}
+.bn-reason{background:#FFF9EE;border:2px solid var(--reason);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.bn-reason .bnr-h{display:flex;align-items:center;gap:8px;line-height:1.35}
+.bn-reason .bnr-tag{flex:none;background:var(--reason);color:#fff;font-size:15px;border-radius:999px;padding:2px 11px}
+.bn-reason .bnr-b{font-size:16px;color:#8A6A2B;line-height:1.45;padding-left:4px}
+.bn-reason .bnr-e{display:flex;gap:7px;align-items:flex-start;background:#EDF7F4;border-left:4px solid var(--evid);border-radius:0 9px 9px 0;padding:6px 10px;font-size:16px;line-height:1.4;color:#134E44;width:100%;text-align:left;cursor:pointer}
+.bn-reason .bnr-e:hover{background:#DFF1EC}
+.bn-reason .bnr-e .be-ic{flex:none}
+.para-list{display:flex;flex-direction:column;gap:14px}
+.para-card{border:3px solid var(--line);border-radius:var(--r-lg);background:var(--card);overflow:hidden}
+.para-card .pc-head{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:19px;color:#fff}
+.para-card .pc-chips{padding:8px 16px 0;display:flex;gap:8px;flex-wrap:wrap}
+.chip.clickable{cursor:pointer;border:none;transition:transform .12s,box-shadow .12s}
+.chip.clickable:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(0,0,0,.18)}
+.para-card textarea{width:100%;border:none;min-height:110px;padding:12px 16px;background:transparent;font-size:20px}
+.para-card textarea:focus{outline:none;background:#FFFDF4}
+.pc-count{text-align:right;font-size:15px;color:var(--mut);padding:0 16px 10px}
+
+/* 다듬기 */
+.polish-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.draft-view{background:#FFFDF6;border:3px solid var(--line);border-radius:var(--r-lg);padding:22px;font-size:20px;line-height:1.8;min-height:420px;max-height:640px;overflow-y:auto;white-space:pre-wrap}
+.check-list{display:flex;flex-direction:column;gap:12px}
+.check-item{background:var(--card);border:2px solid var(--line);border-radius:var(--r-md);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.check-item .ci-q{font-size:23px;line-height:1.5}
+.ck-sum{display:flex;align-items:center;gap:12px;border:2px solid var(--line);border-radius:999px;padding:10px 16px;font-size:19px;background:#FFFDF8;width:100%;text-align:left}
+.ck-sum span:first-child{width:30px;height:30px;border-radius:50%;background:var(--line);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ck-sum.sel1{border-color:var(--bad)} .ck-sum.sel1 .cks-lab{color:#A93230}
+.ck-sum.sel2{border-color:var(--gold)} .ck-sum.sel2 .cks-lab{color:#8A5F08}
+.ck-sum.sel3{border-color:var(--ok)} .ck-sum.sel3 .cks-lab{color:#12814E}
+.ci-scale{display:flex;gap:8px}
+.ci-scale button{flex:1;border:2px solid var(--line);border-radius:999px;padding:12px 8px;font-size:20px;background:#FFFDF8;transition:all .15s}
+.ci-scale button.sel1{background:#FDEEED;border-color:var(--bad);color:#A93230}
+.ci-scale button.sel2{background:var(--gold-soft);border-color:var(--gold);color:#8A5F08}
+.ci-scale button.sel3{background:#F2FBF6;border-color:var(--ok);color:#12814E}
+.fulfil{display:flex;flex-direction:column;gap:8px}
+.fulfil .fi{display:flex;align-items:center;gap:10px;font-size:20px;background:var(--paper);border-radius:var(--r-sm);padding:10px 14px;border:2px solid var(--line)}
+.fulfil .fi .fic{font-size:22px}
+.draft-edit{width:100%;background:#FFFDF6;border:3px dashed var(--line);border-radius:var(--r-lg);padding:22px;font-size:20px;line-height:1.8;min-height:460px;cursor:text;transition:border-color .15s,box-shadow .15s;white-space:pre-wrap}
+.draft-edit:hover{box-shadow:0 4px 14px rgba(232,80,31,.13)}
+.draft-edit:focus{border-style:solid;border-color:var(--claim);box-shadow:0 4px 18px rgba(232,80,31,.2);outline:none}
+.final-edit textarea{width:100%;min-height:380px;border:3px dashed var(--claim);border-radius:var(--r-lg);padding:18px;background:#FFFDF6;font-size:20px;cursor:text;transition:border-color .15s,box-shadow .15s}
+.final-edit textarea:hover{box-shadow:0 4px 14px rgba(232,80,31,.15)}
+.final-edit textarea:focus{border-style:solid;box-shadow:0 4px 18px rgba(232,80,31,.22);outline:none}
+
+/* ---------- 결과 화면 ---------- */
+#scr-result .wrap{align-items:center;text-align:center}
+.medal{
+  width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%, #FFCF6B, var(--gold) 62%, #B57C0C);
+  display:flex;align-items:center;justify-content:center;font-size:56px;color:#fff;
+  box-shadow:0 14px 30px rgba(233,163,25,.45), inset 0 -8px 0 rgba(0,0,0,.14);
+  animation:stampIn .8s cubic-bezier(.2,1.6,.4,1) both;position:relative;
+}
+.medal::after{content:'';position:absolute;inset:9px;border:3px dashed rgba(255,255,255,.65);border-radius:50%}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;text-align:left}
+
+/* ---------- 팝업 ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(51,36,28,.45);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;z-index:60;padding:20px;
+}
+.overlay.on{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pop{
+  background:var(--card);border-radius:28px;box-shadow:0 26px 70px rgba(60,30,10,.35);
+  width:min(760px,100%);max-height:88vh;overflow-y:auto;padding:28px;position:relative;
+  display:flex;flex-direction:column;gap:16px;animation:popIn .35s cubic-bezier(.2,1.4,.4,1) both;
+}
+@keyframes popIn{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
+.pop.wide{width:min(920px,100%)}
+.pop h2{font-size:28px;display:flex;align-items:center;gap:10px}
+.pop .x{position:absolute;top:16px;right:18px;width:44px;height:44px;border-radius:50%;background:var(--paper);font-size:21px;border:2px solid var(--line)}
+.pop-foot{display:flex;justify-content:center;gap:12px;margin-top:4px;flex-wrap:wrap}
+.glossary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.glossary .g{background:var(--paper);border:2px solid var(--line);border-radius:var(--r-sm);padding:10px 14px;font-size:18px}
+.glossary .g b{color:var(--claim-deep)}
+.feedback-big{text-align:center;font-size:56px;line-height:1;animation:pop .5s ease}
+.inq-box textarea{width:100%;min-height:110px;border:3px solid var(--claim);border-radius:var(--r-md);padding:14px;background:#FFFDF6;font-size:20px}
+.sp-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sp-tab{border:2px solid var(--line);border-radius:999px;padding:8px 18px;font-size:19px;background:#FFFDF8;color:var(--mut)}
+.sp-tab.on{background:var(--claim);border-color:var(--claim-deep);color:#fff}
+.sample-view{border:3px solid var(--line);border-radius:var(--r-md);background:var(--paper);padding:20px 22px;font-size:22px;line-height:1.8;min-height:200px}
+.sample-view p{margin:8px 0 0}
+.acc{border:2px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;background:var(--paper)}
+.acc-h{width:100%;text-align:left;padding:14px 18px;font-size:21px;color:var(--claim-deep);display:flex;align-items:center;gap:8px}
+.acc-h:hover{background:var(--claim-soft)}
+.acc-b{display:none;padding:2px 18px 16px;font-size:21px;line-height:1.7}
+.acc.on{border-color:var(--claim)}
+.acc.on .acc-b{display:block}
+.tpl-line{display:flex;gap:10px;align-items:flex-start;margin:7px 0;line-height:1.55}
+.tl-tag{flex:none;font-size:15px;border-radius:999px;padding:3px 12px;color:#fff;margin-top:2px}
+.tl-tag.claim{background:var(--claim)} .tl-tag.reason{background:var(--reason)} .tl-tag.evid{background:var(--evid)} .tl-tag.mut{background:#A08B77}
+.tpl-line u{text-decoration:none;background:var(--gold-soft);border-radius:6px;padding:0 5px;color:#8A5E06}
+.mk-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:7px 0}
+.mk-row>b{flex:none;width:74px;color:var(--mut);font-size:17px}
+.mk{background:#FFFDF8;border:2px solid var(--line);border-radius:999px;padding:4px 13px;font-size:17px}
+.example-para{border-left:6px solid var(--line);background:var(--paper);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:12px 16px;font-size:21px;line-height:1.7;margin-bottom:10px}
+.example-para b{display:block;margin-bottom:4px}
+
+/* 토스트 */
+#toast{
+  position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;padding:13px 26px;border-radius:999px;font-size:19px;
+  opacity:0;pointer-events:none;transition:all .3s;z-index:99;max-width:90vw;text-align:center;
+}
+#toast.on{opacity:1;transform:translateX(-50%)}
+
+/* 꽃가루 */
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:90}
+
+/* ---------- 반응형 ---------- */
+@media (max-width:900px){
+  body{font-size:20px}
+  .home-grid{grid-template-columns:1fr}
+  .concept-grid,.quiz-opts,.two-col,.polish-grid,.result-grid,.glossary{grid-template-columns:1fr}
+  .write-layout{grid-template-columns:1fr}
+  .bone-side{position:static}
+  .src-grid{grid-template-columns:1fr 1fr}
+  .app-title{font-size:40px}
+  .rail .rlink{width:18px}
+  .rail .rname{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
+/* ---------- PDF 인쇄 양식 ---------- */
+#printArea{display:none}
+.print-page{
+  width:210mm;height:297mm;box-sizing:border-box;padding:14mm 16mm;background:#fff;
+  display:flex;flex-direction:column;gap:6mm;font-family:'Jua',sans-serif;color:#3B2A20;
+  page-break-after:always;position:relative;
+}
+.pp-frame{flex:1;display:flex;flex-direction:column;border:1.2mm solid #E8501F;border-radius:6mm;overflow:hidden;background:#FFFDF8}
+.pp-head{display:flex;align-items:center;gap:5mm;padding:5mm 8mm;background:#FDE3D7;border-bottom:1mm dashed #E8A98F}
+.pp-badge{flex:none;width:16mm;height:16mm;border-radius:50%;background:#E8501F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:5mm;transform:rotate(-8deg)}
+.pp-meta{display:flex;flex-direction:column;gap:1mm;min-width:0}
+.pp-title{font-size:7mm;color:#B93A10;line-height:1.25;word-break:keep-all}
+.pp-sub{font-size:4mm;color:#8C7A6A}
+.pp-body{flex:1;padding:7mm 9mm;font-size:4.6mm;line-height:1.9;overflow:hidden}
+.pp-body p{margin:0 0 4mm;text-indent:4mm;word-break:break-word;white-space:pre-wrap}
+.pp-foot{display:flex;justify-content:space-between;align-items:center;padding:0 2mm;font-size:3.8mm;color:#8C7A6A}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff!important}
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block!important}
+  .print-page{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 시작 화면 ═══════════ -->
+<section class="screen on" id="scr-start">
+  <div class="wrap" style="justify-content:center;align-items:center">
+    <div class="hero-stamp">✊</div>
+    <h1 class="app-title">주장하는 글 쓰기 <em>공방</em></h1>
+
+    <div class="start-panel">
+      <div class="mode-banner hidden" id="demoBanner"><span>지금은 <b>체험 모드</b>예요. 활동 내용은 이 기기에만 저장돼요. 선생님이 구글 시트를 연결하면 진짜 우리 반으로 바뀌어요.</span></div>
+      <div class="name-pick">
+        <select id="nameSelect" aria-label="이름 선택"><option value="">이름을 고르세요</option></select>
+        <button class="btn big" id="btnEnter">입장하기</button>
+      </div>
+      <p class="start-note" id="modeInfo">명단을 불러오는 중...</p>
+      <button class="teacher-toggle hidden" id="btnTeacher">⚙️ 선생님 메뉴</button>
+      <div class="teacher-panel hidden" id="teacherPanel">
+        <h3>⚙️ 선생님 메뉴 — 우리 반 시트 연결</h3>
+        <p style="font-size:17px">시트를 웹 앱으로 배포하고 나온 <b>exec로 끝나는 주소</b>를 붙여 넣으세요.</p>
+        <input type="url" id="execInput" placeholder="https://script.google.com/macros/s/…/exec">
+        <div class="btn-row">
+          <button class="btn small" id="btnConnect">연결하기</button>
+          <button class="btn small ghost" id="btnDisconnect">연결 끊기</button>
+        </div>
+        <p class="msg" id="teacherMsg"></p>
+        <div class="hidden" id="studentLinkWrap">
+          <p style="font-size:17px;margin-bottom:6px">학생용 입장 주소 (학교 홈페이지 등 공유 앱용)</p>
+          <div class="linkbox" id="studentLink"></div>
+          <div class="btn-row" style="margin-top:8px"><button class="btn small gold" id="btnCopyLink">주소 복사</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 홈 화면 ═══════════ -->
+<section class="screen" id="scr-home">
+  <div class="topbar">
+    <div class="who"><span class="dot" id="whoDot"></span><span id="whoName">-</span></div>
+    <div class="btn-row">
+      <button class="btn small ghost" id="btnGlossary">📖 용어 도움말</button>
+      <button class="btn small ghost" id="btnLogout">이름 다시 고르기</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="home-head">
+      <h1><b id="homeName">-</b> 님, 오늘은 무엇부터 해 볼까?</h1>
+    </div>
+    <button class="inquiry-banner" id="inquiryBanner"><span class="iq-icon">🔍</span><span class="iq-body"><span class="iq-label">이 단원의 탐구 질문</span><b class="iq-q" id="inquiryText">설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?</b></span><span class="iq-state" id="inquiryState"></span></button>
+    <div class="home-grid">
+      <button class="act-card" data-go="concept">
+        <span class="badge" id="badgeConcept">아직 안 했어요</span>
+        <span class="icon">🧭</span>
+        <h2>개념 탐험</h2>
+        <p>핵심 개념 4가지,<br>만들어 보며 익혀요</p>
+      </button>
+      <button class="act-card" data-go="quiz">
+        <span class="badge" id="badgeQuiz">아직 안 했어요</span>
+        <span class="icon">🕵️</span>
+        <h2>근거 탐정</h2>
+        <p>판별 문제를 풀며<br>근거 보는 눈을 길러요</p>
+      </button>
+      <button class="act-card" data-go="workshop">
+        <span class="badge" id="badgeWorkshop">아직 안 했어요</span>
+        <span class="icon">🔨</span>
+        <h2>주장하는 글 쓰기 공방</h2>
+        <p>쓰기 과정 5단계로<br>나의 글을 완성해요</p>
+      </button>
+    </div>
+    <div class="home-foot">
+      <button class="btn small ghost hidden" id="btnMyResult">🏅 내 결과 보기</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 개념 탐험 ═══════════ -->
+<section class="screen" id="scr-concept">
+  <div class="topbar">
+    <div class="who"><span class="dot" id="whoDot2"></span><span id="whoName2">-</span></div>
+    <button class="btn small ghost" data-home>🏠 홈으로</button>
+  </div>
+  <div class="wrap">
+    <div class="page-head">
+      <h1>🧭 개념 탐험</h1>
+      <span class="chip claim" id="conceptCount">0 / 4 완료</span>
+      <div class="spacer"></div>
+      <button class="btn small ghost" id="btnSampleAll">📜 예시 글 전체 보기</button>
+    </div>
+    <div class="hint-line"><span>💡 카드를 골라 <b>직접 만들어 보며</b> 익혀요</span></div>
+    <div class="concept-grid" id="conceptGrid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ 근거 탐정 ═══════════ -->
+<section class="screen" id="scr-quiz">
+  <div class="topbar">
+    <div class="who"><span class="dot" id="whoDot3"></span><span id="whoName3">-</span></div>
+    <button class="btn small ghost" data-home>🏠 홈으로</button>
+  </div>
+  <div class="wrap">
+    <div class="page-head"><h1>🕵️ 근거 탐정</h1><span class="chip evid" id="quizMode">판별 수사</span></div>
+    <div class="quiz-stage" id="quizStage"></div>
+  </div>
+</section>
+
+<!-- ═══════════ 주장하는 글 쓰기 공방 (5단계) ═══════════ -->
+<section class="screen" id="scr-workshop">
+  <div class="topbar">
+    <div class="who"><span class="dot" id="whoDot4"></span><span id="whoName4">-</span></div>
+    <div class="btn-row">
+      <button class="btn small ghost" id="btnGlossary2">📖 용어 도움말</button>
+      <button class="btn small ghost" data-home>🏠 홈으로</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="rail" id="rail"></div>
+
+    <!-- 1단계 설계 -->
+    <div class="step-panel" id="step1">
+      <div class="step-guide"><span class="gi">📐</span><span class="gt"><b>1단계 · 계획하기</b> — 무엇을, 누구에게 주장할지 정해요</span><button class="btn small ghost" data-help="step1">자세히</button></div>
+      <div class="card" style="display:flex;flex-direction:column;gap:16px">
+        <div class="field">
+          <label><span class="fnum">1</span>바꾸고 싶은 문제 상황<button class="btn small ghost" style="margin-left:auto" data-help="problem">도움말</button></label>
+          <textarea id="inProblem" rows="2" placeholder="주변에서 고치고 싶은 문제를 적어요"></textarea>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label><span class="fnum">2</span>읽을 사람</label>
+            <input type="text" id="inReader" placeholder="읽을 사람을 적어요">
+          </div>
+          <div class="field">
+            <label><span class="fnum">3</span>나의 주장 (한 문장)<button class="btn small ghost" style="margin-left:auto" data-help="claim">도움말</button></label>
+            <input type="text" id="inClaim" placeholder="~해야 한다, ~하자 로 끝나게 적어요">
+          </div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn big" id="toStep2">다음 · 내용 생성하기 →</button></div>
+    </div>
+
+    <!-- 2단계 재료 -->
+    <div class="step-panel" id="step2">
+      <div class="step-guide"><span class="gi">🧺</span><span class="gt"><b>2단계 · 내용 생성하기</b> — 이유 2~3개, 이유마다 근거를 붙여요</span><button class="btn small ghost" data-help="step2">자세히</button></div>
+      <div class="claim-banner"><span class="cb-tag">✊ 나의 주장</span><span class="cb-text" id="step2Claim"></span></div>
+      <div class="reason-list" id="reasonList"></div>
+      <div class="matbar">
+        <span class="chip reason" id="matReasons">이유 0개</span>
+        <span class="chip evid" id="matEvids">근거 0개</span>
+        <span class="chip gold" id="matSrcs">출처 확인 0개</span>
+        <button class="btn small ghost" data-help="evidence">근거 도움말</button>
+      </div>
+      <div class="btn-row"><button class="btn ghost" data-back="1">← 계획하기</button><button class="btn big" id="toStep3">다음 · 내용 조직하기 →</button></div>
+    </div>
+
+    <!-- 3단계 뼈대 -->
+    <div class="step-panel" id="step3">
+      <div class="step-guide"><span class="gi">🦴</span><span class="gt"><b>3단계 · 내용 조직하기</b> — 논리 지도로 연결을 확인해요</span><button class="btn small ghost" data-help="step3">자세히</button></div>
+      <div class="field"><label><span class="fnum" style="background:var(--claim-deep)">제목</span>글 제목 — 내 주장이 드러나게</label><input type="text" id="inTitle" placeholder="예) 복도에서는 걸어 다니자 / 잠이 우리를 지켜요"></div>
+      <div class="field"><label><span class="fnum" style="background:var(--claim)">서론</span>서론 메모<button class="btn small ghost" style="margin-left:auto" data-help="intro">도움말</button></label><textarea id="inIntroMemo" rows="2" placeholder="서론에서 밝힐 문제 상황을 메모해요"></textarea></div>
+      <div class="map-card">
+        <div class="map-title"><span class="fnum" style="background:var(--reason)">본론</span>논리 지도 — 이유와 근거의 연결</div>
+        <div id="logicMap"></div>
+        <div class="map-legend">
+          <span><i style="background:var(--claim)"></i>주장</span>
+          <span><i style="background:var(--reason)"></i>이유</span>
+          <span><i style="background:var(--evid)"></i>근거</span>
+          <span><i style="background:var(--gold)"></i>출처 확인 도장</span>
+          <span style="opacity:.6"><i style="background:#BBB"></i>출처 없는 근거 (흐리게)</span>
+        </div>
+      </div>
+      <div class="field"><label><span class="fnum" style="background:var(--evid)">결론</span>결론 메모<button class="btn small ghost" style="margin-left:auto" data-help="conclusion">도움말</button></label><textarea id="inConcMemo" rows="2" placeholder="결론에서 다시 강조할 내용을 메모해요"></textarea></div>
+      <div class="btn-row"><button class="btn ghost" data-back="2">← 내용 생성하기</button><button class="btn big" id="toStep4">다음 · 표현하기 →</button></div>
+    </div>
+
+    <!-- 4단계 글쓰기 -->
+    <div class="step-panel" id="step4">
+      <div class="step-guide"><span class="gi">✍️</span><span class="gt"><b>4단계 · 표현하기</b> — 문단별로 글을 써요</span><button class="btn small ghost" data-help="step4">자세히</button></div>
+      <div class="write-layout" id="writeLayout">
+        <div class="bone-side">
+          <h3 style="font-size:19px">내가 조직한 내용</h3>
+          <div class="bone-list" id="boneList"></div>
+          <button class="btn small ghost" data-help="write">문단 쓰기 도움말</button>
+        </div>
+        <div class="para-list" id="paraList"></div>
+      </div>
+      <div class="btn-row"><button class="btn ghost" data-back="3">← 내용 조직하기</button><button class="btn big" id="toStep5">다음 · 고쳐쓰기 →</button></div>
+    </div>
+
+    <!-- 5단계 다듬기 -->
+    <div class="step-panel" id="step5">
+      <div class="step-guide"><span class="gi">🪞</span><span class="gt"><b>5단계 · 고쳐쓰기</b> — 점검하며 바로 고쳐 완성해요</span><button class="btn small ghost" data-help="step5">자세히</button></div>
+      <div class="polish-grid" id="polishPhaseA">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h3 style="font-size:22px">📄 나의 글 <span id="polishTitleEcho" style="color:var(--claim-deep)"></span> <span style="font-size:17px;color:var(--mut);font-weight:normal">— ✏️ 글을 눌러 바로 고칠 수 있어요</span></h3>
+          <textarea class="draft-edit" id="firstDraftView"></textarea>
+          <div class="fulfil" id="fulfilList"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h3 style="font-size:22px">✅ 점검 기준</h3>
+          <div class="check-list" id="checkList"></div>
+          <div class="field"><label><span class="fnum">✍</span>이번 글쓰기에서 알게 된 점 (15자 이상)</label><textarea id="inLearned" rows="2" placeholder="쓰기 과정을 돌아보며 알게 된 점을 적어요"></textarea></div>
+          <div class="submit-row"><button class="btn ghost" data-back="4">← 문단으로</button><button class="btn ghost" id="btnPdfB">📄 PDF로 저장</button><button class="btn big gold" id="btnSubmit">완성! 제출하기 🏅</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 결과 화면 ═══════════ -->
+<section class="screen" id="scr-result">
+  <div class="topbar">
+    <div class="who"><span class="dot" id="whoDot5"></span><span id="whoName5">-</span></div>
+    <button class="btn small ghost" data-home>🏠 홈으로</button>
+  </div>
+  <div class="wrap">
+    <div class="medal">🏅</div>
+    <h1 style="font-size:36px">주장하는 글, 완성!</h1>
+    <p style="color:var(--mut);font-size:20px" id="resultSaveNote"></p>
+    <div class="result-grid">
+      <div class="card">
+        <h3 style="font-size:22px;margin-bottom:10px">🕵️ 근거 탐정 결과</h3>
+        <div id="resultQuizBox" style="font-size:19px;display:flex;flex-direction:column;gap:6px"></div>
+        <h3 style="font-size:21px;margin-top:6px">🌱 탐구 질문, 내 생각의 성장</h3>
+        <div id="resultInquiry" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:22px;margin-bottom:10px">🔨 공방 점검 현황</h3>
+        <div class="fulfil" id="resultFulfil"></div>
+      </div>
+    </div>
+    <div class="card" style="width:100%;text-align:left">
+      <h3 style="font-size:22px;margin-bottom:8px" id="resultTitle"></h3>
+      <div class="draft-view" style="max-height:300px" id="resultText"></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn" id="btnPdfR">📄 PDF로 저장</button></div>
+    </div>
+    <div class="btn-row"><button class="btn" data-home>🏠 홈으로</button></div>
+  </div>
+</section>
+
+<!-- ═══════════ 팝업들 ═══════════ -->
+<div class="overlay" id="ovPop">
+  <div class="pop" id="popBox">
+    <button class="x" id="popX" aria-label="닫기">✕</button>
+    <div id="popBody"></div>
+  </div>
+</div>
+
+<div id="printArea"></div>
+<canvas id="confetti"></canvas>
+<div id="toast"></div>
+<script>
+/* ============================================================
+   © 2026 GEG 화성(깊이 e끌림). All rights reserved. GEGHS-DEEPE-2026
+   ============================================================ */
+'use strict';
+
+/* ---------- 기본 글 (시트가 비어 있으면 이걸 쓴다) ---------- */
+const DEFAULT_TEXTS = {
+  concepts: [
+    { key:'탐구 질문', text:'설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?' },
+    { key:'언제 왜 쓸까', text:'위험한 길, 아까운 급식, 불편한 규칙처럼 바꾸고 싶은 문제를 만났을 때, 주장하는 글은 읽는 사람의 마음과 행동을 움직여요. 설득하는 힘을 갖추면 내 목소리로 우리 반과 학교, 마을을 조금씩 바꿀 수 있어요.' },
+    { key:'주장하는 글이란', text:'주장하는 글은 어떤 문제에 대해 다른 사람을 설득할 목적으로 쓰는 글이에요. 주장하는 글을 쓰면 논리적 사고력을 기를 수 있고, 내 주장을 글로 표현해 다른 사람을 설득할 수 있어요.' },
+    { key:'짜임', text:'주장하는 글은 서론, 본론, 결론으로 짜여 있어요. 서론에서는 글을 쓴 문제 상황을 밝히고 주장을 분명하게 나타내요. 본론은 주장의 이유와 그 이유를 뒷받침하는 근거로 구성해요. 결론에서는 글 내용을 요약하고 주장을 다시 한번 강조해요.' },
+    { key:'주장 이유 근거', text:'주장은 어떤 문제에 대해 내세우는 글쓴이의 의견이에요. 이유는 자신이 그렇게 주장하는 주관적인 까닭이에요. 근거는 이유를 뒷받침하는 객관적인 자료로, 통계 자료, 전문가 의견, 책 내용, 기사 내용 같은 것을 활용해요.' },
+    { key:'인용과 출처', text:'인용이란 다른 사람의 말이나 글, 자료를 가져와 자신의 말이나 글에서 사용하는 것이에요. 인용할 때에는 자료를 만든 사람이나 기관, 만든 시기, 자료명, 자료가 실린 곳을 밝혀 저작자의 권리를 보호해야 해요.' }
+  ],
+  sample: [
+    { role:'서론', text:'요즘 스마트폰을 손에서 놓지 못해 잠이 부족하거나 할 일을 미루는 친구들이 많다. 스마트폰은 편리하고 꼭 필요한 경우가 많지만, 쉽게 빠져든다는 문제가 있다. 우리는 스마트폰 사용 시간을 스스로 정해 지켜야 한다. 지금부터 그 이유를 살펴보자.' },
+    { role:'본론 1', text:'첫째, 스마트폰을 오래 사용하면 건강을 해치기 때문이다. ○○청소년연구소(2025)의 조사에 따르면, 하루 4시간 이상 스마트폰을 사용하는 초등학생은 그렇지 않은 학생보다 수면 시간이 부족하고 눈의 피로를 더 많이 느꼈다. 따라서 건강을 지키려면 사용 시간을 정해야 한다.' },
+    { role:'본론 2', text:'둘째, 공부에 집중하기 어려워지기 때문이다. ○○신문에 나온 뇌과학 전문가 김○○ 박사의 인터뷰에 따르면, "공부 중에 스마트폰 알림을 확인하면 다시 집중하는 데 오랜 시간이 걸린다."라고 한다. 사용 시간을 스스로 정하면 공부할 때 온전히 집중할 수 있다.' },
+    { role:'본론 3', text:'셋째, 가족, 친구와 함께하는 시간이 줄어들기 때문이다. 밥을 먹으면서도 화면만 보면 서로의 이야기를 놓치게 된다. 스마트폰을 내려놓는 시간을 정하면 소중한 사람들과 눈을 맞추고 대화할 수 있다.' },
+    { role:'결론', text:'지금까지 스마트폰 사용 시간을 스스로 정해야 하는 이유를 살펴보았다. 건강을 지키고, 공부에 집중하고, 소중한 사람들과의 시간을 되찾으려면 스마트폰 사용 시간을 스스로 정해 지켜야 한다. 오늘부터 나만의 사용 규칙을 만들어 실천해 보자.' }
+  ],
+  quiz: [
+    { q:'주장하는 글에서 이유를 뒷받침하는 객관적인 자료를 무엇이라고 하나요?', o:['주장','이유','근거','제목'], a:3, exp:'근거는 통계 자료, 전문가 의견, 책 내용, 기사 내용처럼 이유를 뒷받침하는 객관적인 자료예요.', type:'짜임과 개념' },
+    { q:'"학교 앞 도로에 과속 방지 턱을 만들어야 한다."는 무엇에 해당하나요?', o:['주장','근거','출처','결론'], a:1, exp:'어떤 문제에 대해 내세우는 글쓴이의 의견이므로 주장이에요.', type:'짜임과 개념' },
+    { q:'주장 "일회용품 사용을 줄이자"에 어울리는 이유는 무엇인가요?', o:['일회용품 쓰레기가 환경을 오염시키기 때문이다.','일회용품은 값이 싸고 편리하기 때문이다.','우리 학교 급식이 맛있기 때문이다.','종이컵에는 여러 가지 색이 있기 때문이다.'], a:1, exp:'이유는 주장과 관련이 있고 주장을 잘 설명해야 해요.', type:'이유의 타당성' },
+    { q:'다음 중 근거로 알맞은 객관적인 자료는 무엇인가요?', o:['내 짝꿍의 느낌','어젯밤에 꾼 꿈 이야기','국립환경과학원(2025)의 통계 자료','그냥 그럴 것 같다는 생각'], a:3, exp:'근거는 누가 보아도 확인할 수 있는 객관적인 자료여야 해요.', type:'근거의 객관성' },
+    { q:'이유 "아침밥을 먹으면 집중력이 높아진다"를 뒷받침하는 근거로 가장 알맞은 것은?', o:['아침밥은 따뜻해서 기분이 좋다.','○○대학교 연구팀(2024)의 실험 결과, 아침밥을 먹은 학생의 수업 집중 시간이 더 길었다.','나는 아침에 시리얼을 먹는다.','아침에는 새가 지저귄다.'], a:2, exp:'이유와 관련 있는 실험, 조사 결과가 이유를 뒷받침하는 근거가 돼요.', type:'근거의 객관성' },
+    { q:'인용의 출처를 밝힐 때 꼭 필요하지 않은 것은 무엇인가요?', o:['자료를 만든 사람이나 기관','자료를 만든 시기','인용한 자료명','글쓴이의 어릴 적 꿈'], a:4, exp:'출처에는 만든 사람이나 기관, 만든 시기, 자료명, 자료가 실린 곳이 들어가야 해요.', type:'인용과 출처' },
+    { q:'다음 중 출처를 믿을 수 있게 밝힌 것은 무엇인가요?', o:['어떤 인터뷰에 따르면','누가 그러던데','보건복지부(2025), 「어린이 건강 실태 조사」, 보건복지부 누리집','인터넷 어딘가에서 본 글'], a:3, exp:'누가, 언제, 어떤 자료를, 어디에 실었는지 정확히 밝혀야 믿을 수 있어요.', type:'인용과 출처' },
+    { q:'근거를 인용할 때 지켜야 할 일로 알맞지 않은 것은 무엇인가요?', o:['출처를 밝힌다.','저작자의 의도를 정확히 전달한다.','자료의 정보가 정확한지 확인한다.','좋은 글은 출처 없이 몰래 가져다 쓴다.'], a:4, exp:'출처 없이 몰래 가져다 쓰는 것은 표절이에요. 저작자의 권리를 지켜야 해요.', type:'인용과 출처' }
+  ]
+};
+
+/* ---------- 모드 판별 ---------- */
+const APPID = '주장공방';
+const IN_GAS = (typeof google !== 'undefined') && google.script && google.script.run;
+const EXEC_KEY = 'teacherExec:' + APPID;
+
+function hashExec(){
+  const m = location.hash.match(/#c=(.+)/);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+const MODE = (function(){
+  if (IN_GAS) return { type:'gas', exec:'' };
+  const h = hashExec();
+  if (h) return { type:'link', exec:h };
+  let saved=''; try{ saved = localStorage.getItem(EXEC_KEY)||''; }catch(e){}
+  if (saved) return { type:'saved', exec:saved };
+  return { type:'demo', exec:'' };
+})();
+const LINKED = MODE.type !== 'demo';
+
+function 서버호출(fn){
+  const args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function(res, rej){
+    let done=false;
+    const t=setTimeout(function(){ if(!done){done=true; rej(new Error('응답이 없어요.'));} }, 15000);
+    google.script.run
+      .withSuccessHandler(function(v){ if(!done){done=true; clearTimeout(t); res(v);} })
+      .withFailureHandler(function(e){ if(!done){done=true; clearTimeout(t); rej(e);} })
+      [fn].apply(google.script.run, args);
+  });
+}
+
+// JSONP: 깃허브 페이지(다른 도메인)에서 앱스 스크립트를 부를 때 브라우저 보안(CORS)에 막히지 않는 방식
+let _jsonpN = 0;
+function jsonpTo(exec, params){
+  return new Promise(function(res, rej){
+    const cb = '__cb' + (++_jsonpN) + '_' + Date.now();
+    const s = document.createElement('script');
+    let done = false;
+    function cleanup(){ try{ delete window[cb]; }catch(e){ window[cb]=undefined; } if(s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = function(d){ done=true; try{ res(d); } finally{ cleanup(); } };
+    s.onerror = function(){ if(!done){ cleanup(); rej(new Error('net')); } };
+    let q='';
+    for (const k in params) q += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+    s.src = exec + (exec.indexOf('?')>-1?'&':'?') + q.slice(1) + '&callback=' + cb;
+    document.head.appendChild(s);
+    setTimeout(function(){ if(!done){ cleanup(); rej(new Error('timeout')); } }, 15000);
+  });
+}
+function jsonp(params){ return jsonpTo(MODE.exec, params); }
+
+/* ---------- 데이터 ---------- */
+let DATA = { students:[], texts: JSON.parse(JSON.stringify(DEFAULT_TEXTS)) };
+
+function mergeTexts(t){
+  if (!t) return;
+  if (t.concepts && t.concepts.length) {
+    t.concepts.forEach(function(c){
+      const hit = DATA.texts.concepts.find(function(d){ return d.key===c.key; });
+      if (hit) hit.text = c.text; else DATA.texts.concepts.push(c);
+    });
+  }
+  if (t.sample && t.sample.length) DATA.texts.sample = t.sample;
+  if (t.quiz && t.quiz.length) DATA.texts.quiz = t.quiz;
+}
+function conceptText(key){
+  const hit = DATA.texts.concepts.find(function(c){ return c.key===key; });
+  return hit ? hit.text : '';
+}
+
+async function loadData(){
+  const info = document.getElementById('modeInfo');
+  if (MODE.type === 'gas') {
+    info.textContent = '선생님 시트에서 명단을 불러오는 중...';
+    try {
+      const d = await 서버호출('getAppData');
+      if (!d || !d.ok) throw new Error();
+      DATA.students = d.students || [];
+      mergeTexts(d.texts);
+      info.textContent = '우리 반 시트와 연결되었어요.';
+    } catch(e){ info.textContent = '명단을 불러오지 못했어요. 새로고침해 보세요.'; }
+  } else if (LINKED) {
+    info.textContent = '선생님 시트에서 명단을 불러오는 중...';
+    try {
+      const d = await jsonp({ action:'getData' });
+      if (!d || !d.ok) throw new Error();
+      DATA.students = d.students || [];
+      mergeTexts(d.texts);
+      info.textContent = '우리 반 시트와 연결되었어요.';
+    } catch(e){
+      info.textContent = '시트와 연결하지 못했어요. 주소를 확인해 주세요. 지금은 체험 명단으로 열려요.';
+      fillDemoStudents();
+    }
+  } else {
+    fillDemoStudents();
+    document.getElementById('demoBanner').classList.remove('hidden');
+    info.textContent = '이름을 고르고 입장해 보세요.';
+  }
+  if (!DATA.students.length) fillDemoStudents();
+  renderNameSelect();
+}
+function fillDemoStudents(){
+  DATA.students = [];
+  for (let i=1;i<=30;i++) DATA.students.push({ no:String(i), name:'학생'+i });
+}
+function renderNameSelect(){
+  const sel = document.getElementById('nameSelect');
+  sel.innerHTML = '<option value="">이름을 고르세요</option>';
+  DATA.students.forEach(function(s){
+    const o=document.createElement('option');
+    o.value=s.no; o.textContent=s.no+'번 '+s.name;
+    sel.appendChild(o);
+  });
+}
+
+/* ---------- 상태 & 이어하기 ---------- */
+function freshState(){
+  return {
+    student:null,
+    concept:{ done:[false,false,false,false,false] },
+    quiz:{ done:false, answers:[], correct:0, total:0, wrong:[], weak:'' },
+    inquiry:{ q1:'', current:'', final:'' },
+    ws:{
+      step:1, maxStep:1, changedAt:0,
+      problem:'', reader:'', claim:'',
+      reasons:[],          // {text, evids:[{text,type,who,when,what,where}]}
+      introMemo:'', concMemo:'',
+      paras:{ intro:'', bodies:[], conc:'' },
+      firstDraft:'', checks:[0,0,0,0,0],
+      title:'', finalText:'', learned:'', submitted:false
+    }
+  };
+}
+let state = freshState();
+const progKey = function(no){ return 'progress:'+APPID+':'+no; };
+
+function saveLocal(){
+  if (!state.student) return;
+  try { localStorage.setItem(progKey(state.student.no), JSON.stringify({ at:Date.now(), state:state })); } catch(e){}
+}
+function loadLocal(no){
+  try {
+    const raw = localStorage.getItem(progKey(no));
+    if (!raw) return null;
+    const saved = JSON.parse(raw).state || null;
+    return saved ? normalizeState(saved) : null;
+  } catch(e){ return null; }
+}
+/* 예전 버전에서 저장한 진행 데이터에 빠진 항목이 있어도
+   최신 구조(freshState)에 안전하게 합쳐서 오류가 나지 않게 함 */
+function normalizeState(saved){
+  function merge(base, over){
+    if (over===null || over===undefined) return base;
+    if (Array.isArray(base)) return Array.isArray(over) ? over : base;
+    if (typeof base==='object' && base!==null){
+      if (typeof over!=='object' || over===null || Array.isArray(over)) return base;
+      const out={};
+      Object.keys(base).forEach(function(k){ out[k]=merge(base[k], over[k]); });
+      return out;
+    }
+    return (typeof over===typeof base) ? over : base;
+  }
+  const st=merge(freshState(), saved);
+  // 이유·근거 항목도 필수 필드를 보강
+  st.ws.reasons=(st.ws.reasons||[]).map(function(r){
+    r=r||{};
+    return { text:String(r.text||''), because:String(r.because||''), evids:(r.evids||[]).map(function(e){
+      e=e||{};
+      return { text:String(e.text||''), type:String(e.type||''),
+               who:String(e.who||''), when:String(e.when||''), what:String(e.what||''), where:String(e.where||'') };
+    }) };
+  });
+  if (!Array.isArray(st.ws.checks) || st.ws.checks.length!==5) st.ws.checks=[0,0,0,0,0];
+  if (!Array.isArray(st.concept.done)) st.concept.done=[];
+  while (st.concept.done.length<5) st.concept.done.push(false); // 예전 저장본(4칸)도 진행 유지
+  st.concept.done.length=5;
+  st.ws.step=Math.min(Math.max(Number(st.ws.step)||1,1),5);
+  st.ws.maxStep=Math.min(Math.max(Number(st.ws.maxStep)||st.ws.step,st.ws.step),5);
+  return st;
+}
+function clearLocal(no){ try{ localStorage.removeItem(progKey(no)); }catch(e){} }
+
+/* ---------- 저장 통로 (시트) ---------- */
+async function sheetLog(act, summary, detail, extra){
+  if (!state.student) return;
+  const payload = Object.assign({
+    kind:'log', no:state.student.no, name:state.student.name,
+    act:act, summary:summary||'', detail:detail||'',
+    progressLabel: progressLabel()
+  }, extra||{});
+  try {
+    if (MODE.type==='gas') await 서버호출('saveLogFromApp', payload);
+    else if (LINKED) await jsonp({ action:'save', data: JSON.stringify(payload) });
+  } catch(e){ /* 기록 실패는 조용히 넘어간다 */ }
+}
+function progressLabel(){
+  const w = state.ws;
+  if (w.submitted) return '완성!';
+  if (w.maxStep>1 || w.problem || w.claim) return '공방 '+w.step+'/5 단계';
+  if (state.quiz.done) return '퀴즈 완료';
+  const c = state.concept.done.filter(Boolean).length;
+  if (c>0) return '개념 '+c+'/4';
+  return '시작함';
+}
+
+/* ---------- 화면 전환 ---------- */
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+function syncWho(){
+  const nm = state.student ? (state.student.no+'번 '+state.student.name) : '-';
+  ['whoName','whoName2','whoName3','whoName4','whoName5','homeName'].forEach(function(id){
+    const el=document.getElementById(id); if(el) el.textContent = id==='homeName' ? (state.student?state.student.name:'-') : nm;
+  });
+  document.querySelectorAll('.who .dot').forEach(function(d){ d.classList.toggle('demo', !LINKED); });
+}
+
+/* ---------- 토스트 & 꽃가루 ---------- */
+let toastTimer=null;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ t.classList.remove('on'); }, 2600);
+}
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function confetti(){
+  if (reduceMotion) return;
+  const cv=document.getElementById('confetti');
+  cv.width=innerWidth; cv.height=innerHeight;
+  const ctx=cv.getContext('2d');
+  if (!ctx) return;
+  const cols=['#E8501F','#E9A319','#0E7C6B','#D97706','#F2789F','#5E8BFF'];
+  const ps=[];
+  for(let i=0;i<140;i++){
+    ps.push({ x:innerWidth/2, y:innerHeight*0.42,
+      vx:(Math.random()-.5)*16, vy:-Math.random()*15-4,
+      s:Math.random()*9+5, c:cols[i%cols.length], r:Math.random()*Math.PI, vr:(Math.random()-.5)*.3,
+      shape: i%3 });
+  }
+  let n=0;
+  (function tick(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(function(p){
+      p.x+=p.vx; p.y+=p.vy; p.vy+=.45; p.r+=p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c;
+      if(p.shape===0) ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);
+      else if(p.shape===1){ ctx.beginPath(); ctx.arc(0,0,p.s/2,0,7); ctx.fill(); }
+      else { ctx.beginPath(); ctx.moveTo(0,-p.s/2); ctx.lineTo(p.s/2,p.s/2); ctx.lineTo(-p.s/2,p.s/2); ctx.closePath(); ctx.fill(); }
+      ctx.restore();
+    });
+    if(++n<110) requestAnimationFrame(tick);
+    else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+/* ---------- 팝업 ---------- */
+const ov=document.getElementById('ovPop'), popBody=document.getElementById('popBody'), popBox=document.getElementById('popBox');
+let popCloseable=true;
+function openPop(html, opts){
+  opts=opts||{};
+  popBody.innerHTML=html;
+  foldExamples(popBody);
+  popBox.classList.toggle('wide', !!opts.wide);
+  popCloseable = opts.closeable!==false;
+  document.getElementById('popX').style.display = popCloseable ? '' : 'none';
+  ov.classList.add('on');
+}
+/* 예시 블록이 2개 이상이면 접이식으로 바꿔 한 화면 글자 수를 줄임 */
+function foldExamples(root){
+  const blocks=Array.prototype.slice.call(root.querySelectorAll('.example-para'));
+  if (blocks.length<2) return;
+  blocks.forEach(function(bl){
+    const b=bl.querySelector('b');
+    const title=b ? b.textContent : '예시 보기';
+    if (b) b.remove();
+    const item=document.createElement('div'); item.className='acc';
+    const head=document.createElement('button'); head.className='acc-h';
+    head.innerHTML='<span class="acc-arrow">▸</span> '+esc(title);
+    const body=document.createElement('div'); body.className='acc-b';
+    while (bl.firstChild) body.appendChild(bl.firstChild);
+    item.appendChild(head); item.appendChild(body);
+    bl.parentNode.replaceChild(item, bl);
+    head.addEventListener('click', function(){
+      const wasOn=item.classList.contains('on');
+      root.querySelectorAll('.acc.on').forEach(function(o){
+        o.classList.remove('on');
+        o.querySelector('.acc-arrow').textContent='▸';
+      });
+      if (!wasOn){ item.classList.add('on'); head.querySelector('.acc-arrow').textContent='▾'; }
+    });
+  });
+}
+function closePop(){ ov.classList.remove('on'); popBody.innerHTML=''; }
+document.getElementById('popX').addEventListener('click', closePop);
+ov.addEventListener('click', function(e){ if(e.target===ov && popCloseable) closePop(); });
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
+/* ---------- 용어 도움말 ---------- */
+function openGlossary(){
+  openPop(
+    '<h2>📖 용어 도움말</h2>'+
+    '<p style="font-size:19px;color:var(--mut)">궁금한 낱말을 눌러 보세요.</p>'+
+    '<div class="example-para"><b>주장</b>어떤 문제에 대해 내세우는 글쓴이의 의견</div>'+
+    '<div class="example-para"><b>이유</b>그렇게 주장하는 나의 까닭 (주관적)</div>'+
+    '<div class="example-para"><b>근거</b>이유를 뒷받침하는 자료 (객관적: 통계, 전문가 의견, 책, 기사)</div>'+
+    '<div class="example-para"><b>서론</b>문제 상황을 밝히고 주장을 나타내는 첫 부분</div>'+
+    '<div class="example-para"><b>본론</b>이유와 근거로 주장을 설득하는 가운데 부분</div>'+
+    '<div class="example-para"><b>결론</b>내용을 요약하고 주장을 강조하는 마지막 부분</div>'+
+    '<div class="example-para"><b>인용</b>다른 사람의 말이나 글, 자료를 가져와 쓰는 것</div>'+
+    '<div class="example-para"><b>출처</b>자료를 만든 사람·기관, 시기, 자료명, 실린 곳</div>'+
+    '<div class="pop-foot"><button class="btn" onclick="closePop()">알겠어요</button></div>'
+  );
+}
+document.getElementById('btnGlossary').addEventListener('click', openGlossary);
+document.getElementById('btnGlossary2').addEventListener('click', openGlossary);
+
+/* ---------- 예시 글 전체 보기 ---------- */
+function openSampleAll(){
+  const ps=DATA.texts.sample;
+  const cls={ '서론':'var(--claim)','결론':'var(--evid)' };
+  let i=0;
+  openPop(
+    '<h2>📜 예시 글 — 스마트폰 사용 시간을 스스로 정하자</h2>'+
+    '<div class="sp-tabs" id="spTabs"></div>'+
+    '<div class="sample-view" id="spView"></div>'+
+    '<div class="btn-row"><button class="btn ghost" id="spPrev">← 이전</button><button class="btn" id="spNext">다음 →</button></div>',
+    {wide:true});
+  const tabs=document.getElementById('spTabs'), view=document.getElementById('spView');
+  ps.forEach(function(p,pi){
+    const t=document.createElement('button'); t.className='sp-tab'; t.textContent=p.role;
+    t.addEventListener('click', function(){ i=pi; draw(); });
+    tabs.appendChild(t);
+  });
+  function draw(){
+    const p=ps[i];
+    tabs.querySelectorAll('.sp-tab').forEach(function(t,ti){ t.classList.toggle('on', ti===i); });
+    view.style.borderColor = cls[p.role]||'var(--reason)';
+    view.innerHTML='<b style="color:var(--claim-deep)">'+esc(p.role)+'</b><p>'+esc(p.text)+'</p>';
+    document.getElementById('spPrev').style.visibility = i===0 ? 'hidden':'';
+    const next=document.getElementById('spNext');
+    next.textContent = i===ps.length-1 ? '잘 읽었어요 ✓' : '다음 →';
+  }
+  document.getElementById('spPrev').addEventListener('click', function(){ if(i>0){ i--; draw(); } });
+  document.getElementById('spNext').addEventListener('click', function(){
+    if (i<ps.length-1){ i++; draw(); } else closePop();
+  });
+  draw();
+}
+document.getElementById('btnSampleAll').addEventListener('click', openSampleAll);
+
+/* ============================================================
+   시작 화면 · 선생님 메뉴
+   ============================================================ */
+(function setupStart(){
+  const btnT=document.getElementById('btnTeacher');
+  const panel=document.getElementById('teacherPanel');
+  // ⚙️는 웹앱 실행·학생 링크에서는 아예 렌더링하지 않는다
+  if (MODE.type==='saved' || MODE.type==='demo') {
+    btnT.classList.remove('hidden');
+    btnT.addEventListener('click', function(){
+      panel.classList.toggle('hidden');
+      if (MODE.type==='saved') document.getElementById('execInput').value = MODE.exec;
+    });
+  } else {
+    btnT.remove(); panel.remove();
+  }
+  const msg=document.getElementById('teacherMsg');
+  const conn=document.getElementById('btnConnect');
+  if (conn) conn.addEventListener('click', async function(){
+    const v=document.getElementById('execInput').value.trim();
+    if (!/^https:\/\/script\.google\.com\/.+\/exec/.test(v)) { msg.textContent='exec로 끝나는 주소를 붙여 넣어 주세요.'; return; }
+    msg.textContent='연결을 확인하는 중...';
+    try {
+      const d=await jsonpTo(v, { action:'getData' });
+      if (!d || !d.ok) throw new Error();
+      try{ localStorage.setItem(EXEC_KEY, v); }catch(e){}
+      MODE.type='saved'; MODE.exec=v;
+      DATA.students=d.students||[]; mergeTexts(d.texts);
+      if(!DATA.students.length) fillDemoStudents();
+      renderNameSelect();
+      document.getElementById('demoBanner').classList.add('hidden');
+      document.getElementById('modeInfo').textContent='우리 반 시트와 연결되었어요.';
+      msg.textContent='연결되었어요! 아래 학생용 주소를 나눠 주세요.';
+      const base=location.href.split('#')[0];
+      document.getElementById('studentLink').textContent=base+'#c='+encodeURIComponent(v);
+      document.getElementById('studentLinkWrap').classList.remove('hidden');
+    } catch(e){ msg.textContent='연결하지 못했어요. 배포 상태(액세스: 모든 사용자)와 주소를 확인해 주세요.'; }
+  });
+  const dis=document.getElementById('btnDisconnect');
+  if (dis) dis.addEventListener('click', function(){
+    try{ localStorage.removeItem(EXEC_KEY); }catch(e){}
+    location.hash=''; location.reload();
+  });
+  const cp=document.getElementById('btnCopyLink');
+  if (cp) cp.addEventListener('click', function(){
+    const t=document.getElementById('studentLink').textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+      function(){ toast('학생용 주소를 복사했어요.'); },
+      function(){ toast('길게 눌러 직접 복사해 주세요.'); }
+    );
+  });
+})();
+
+document.getElementById('btnEnter').addEventListener('click', function(){
+  const no=document.getElementById('nameSelect').value;
+  if (!no) { toast('먼저 이름을 골라 주세요.'); return; }
+  const stu=DATA.students.find(function(s){ return s.no===no; });
+  const saved=loadLocal(no);
+  if (saved && !saved.ws.submitted) {
+    state=saved; state.student=stu;
+    toast('지난번에 하던 곳부터 이어서 해요!');
+  } else {
+    state=freshState(); state.student=stu;
+  }
+  syncWho(); renderHome(); show('scr-home');
+  sheetLog('입장','앱에 들어왔어요');
+  if (!state.inquiry.q1){
+    openInquiry('q1', conceptText('탐구 질문')||'설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?',
+      '이 단원을 여는 질문이야. 지금 떠오르는 생각을 솔직하게 적어 봐. 정답은 없어!', function(){
+        renderHome();
+        toast('좋아! 활동을 마치면 이 질문에 다시 답하게 될 거야. 🌱');
+      });
+  }
+});
+document.getElementById('btnLogout').addEventListener('click', function(){
+  saveLocal(); state=freshState(); show('scr-start');
+});
+document.querySelectorAll('[data-home]').forEach(function(b){
+  b.addEventListener('click', function(){ saveLocal(); renderHome(); show('scr-home'); });
+});
+
+/* ============================================================
+   홈 화면
+   ============================================================ */
+function renderHome(){
+  const c=state.concept.done.filter(Boolean).length, cAll=CONCEPTS.length;
+  setBadge('badgeConcept', c===0?null:(c===cAll), c===cAll?'완료!':'진행 중 · '+c+'/'+cAll);
+  setBadge('badgeQuiz', !state.quiz.done && state.quiz.answers.length===0 ? null : state.quiz.done,
+    state.quiz.done ? ('정답률 '+quizRate()+'%') : '진행 중');
+  const w=state.ws;
+  const started = w.maxStep>1 || w.problem || w.claim || w.reasons.length;
+  setBadge('badgeWorkshop', !started?null:w.submitted, w.submitted?'완성!':'진행 중 · '+w.step+'/5');
+  document.getElementById('btnMyResult').classList.toggle('hidden', !w.submitted);
+  document.getElementById('inquiryText').textContent = conceptText('탐구 질문') || '설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?';
+  const st=document.getElementById('inquiryState');
+  if (state.inquiry.q1){ st.className='iq-state done'; st.textContent='✨ 내 생각 다듬기'; }
+  else { st.className='iq-state todo'; st.textContent='✍ 눌러서 답하기'; }
+}
+function setBadge(id, doneFlag, doingText){
+  const el=document.getElementById(id);
+  el.classList.remove('doing','done');
+  if (doneFlag===null){ el.textContent='아직 안 했어요'; }
+  else if (doneFlag===true){ el.textContent=doingText; el.classList.add('done'); }
+  else { el.textContent=doingText; el.classList.add('doing'); }
+}
+document.getElementById('inquiryBanner').addEventListener('click', function(){
+  if (!state.inquiry.q1){
+    openInquiry('q1', conceptText('탐구 질문')||'설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?',
+      '이 단원을 여는 질문이야. 지금 떠오르는 생각을 솔직하게 적어 봐. 정답은 없어!', function(){ renderHome(); });
+    return;
+  }
+  openInquiryJournal();
+});
+function inquiryThoughts(){
+  const list=[];
+  if (state.inquiry.q1) list.push({ label:'🌱 처음 생각', text:state.inquiry.q1 });
+  const cur=(state.inquiry.current||'').trim();
+  if (cur && cur!==state.inquiry.q1 && cur!==state.inquiry.final) list.push({ label:'✨ 다듬은 생각', text:cur });
+  if (state.inquiry.final) list.push({ label:'🏅 마지막 생각', text:state.inquiry.final });
+  return list;
+}
+function openInquiryJournal(){
+  openPop(
+    '<h2>🔍 탐구 질문</h2>'+
+    '<p class="lesson-text" style="font-size:22px;text-align:center">'+esc(conceptText('탐구 질문')||'')+'</p>'+
+    '<p style="font-size:18px;color:var(--mut)">✨ 나의 생각 — 공부하며 계속 고치고 다듬어요.</p>'+
+    '<div class="inq-box"><textarea id="iqCur" placeholder="지금의 내 생각을 적어요 (10자 이상)">'+esc(state.inquiry.current||state.inquiry.q1||'')+'</textarea></div>'+
+    '<div class="pop-foot"><button class="btn ghost" onclick="closePop()">닫기</button><button class="btn" id="iqSave" disabled>✨ 다듬어 저장</button></div>'
+  );
+  const ta=document.getElementById('iqCur'), save=document.getElementById('iqSave');
+  function upd(){
+    const t=ta.value.trim();
+    save.disabled = t.length<10 || t===(state.inquiry.current||state.inquiry.q1||'');
+  }
+  ta.addEventListener('input', upd); upd();
+  save.addEventListener('click', function(){
+    state.inquiry.current=ta.value.trim(); saveLocal(); renderHome();
+    sheetLog('탐구 질문(생각 다듬음)', conceptText('탐구 질문')||'', state.inquiry.current);
+    closePop(); toast('생각이 더 또렷해졌어요! ✨');
+  });
+}
+document.querySelectorAll('.act-card').forEach(function(card){
+  card.addEventListener('click', function(){
+    const go=card.dataset.go;
+    if (go==='concept'){ renderConceptGrid(); show('scr-concept'); }
+    if (go==='quiz'){ enterQuiz(); }
+    if (go==='workshop'){ enterWorkshop(); }
+  });
+});
+document.getElementById('btnMyResult').addEventListener('click', function(){ renderResult(); show('scr-result'); });
+
+/* ============================================================
+   개념 탐험 — 4개 카드, 팝업 속 직접 완성 활동
+   ============================================================ */
+const CONCEPTS=[
+  { id:4, key:'언제 왜 쓸까', icon:'🌍', color:'var(--claim-deep)', sub:'주장하는 글이 필요한 순간 찾기' },
+  { id:0, key:'주장하는 글이란', icon:'✊', color:'var(--claim)', sub:'무엇을 하려고 쓰는 글일까?' },
+  { id:1, key:'짜임', icon:'🧱', color:'var(--reason)', sub:'서론·본론·결론을 직접 배치해요' },
+  { id:2, key:'주장 이유 근거', icon:'⚖️', color:'var(--evid)', sub:'문장 하나씩, 무엇인지 골라요' },
+  { id:3, key:'인용과 출처', icon:'🏷️', color:'var(--gold)', sub:'출처 네 조각을 맞춰 도장을 받아요' }
+];
+function renderConceptGrid(){
+  const g=document.getElementById('conceptGrid'); g.innerHTML='';
+  CONCEPTS.forEach(function(c){
+    const done=state.concept.done[c.id];
+    const el=document.createElement('button');
+    el.className='concept-card'+(done?' done':'');
+    el.innerHTML='<span class="cnum" style="background:'+c.color+'">'+c.icon+'</span>'+
+      '<span class="ctxt"><h3>'+esc(c.key==='주장 이유 근거'?'주장·이유·근거':c.key)+'</h3><p>'+esc(c.sub)+'</p></span>'+
+      '<span class="cstate">'+(done?'✅':'▶')+'</span>';
+    el.addEventListener('click', function(){ openLesson(c.id); });
+    g.appendChild(el);
+  });
+  document.getElementById('conceptCount').textContent = state.concept.done.filter(Boolean).length+' / '+CONCEPTS.length+' 완료';
+}
+
+function openLesson(id){
+  const c=CONCEPTS[id];
+  let h='<h2><span style="font-size:32px">'+c.icon+'</span> '+esc(c.key==='주장 이유 근거'?'주장·이유·근거':c.key)+'</h2>';
+  h+='<button class="fold-btn" id="lessonFold">📖 개념 설명 보기 ▾</button>';
+  h+='<p class="lesson-text" id="lessonText" style="display:none">'+esc(conceptText(c.key))+'</p>';
+  h+='<div id="lessonAct"></div>';
+  openPop(h,{wide:true});
+  document.getElementById('lessonFold').addEventListener('click', function(){
+    const t=document.getElementById('lessonText');
+    const open=t.style.display==='none';
+    t.style.display=open?'':'none';
+    this.textContent=open?'📖 개념 설명 접기 ▴':'📖 개념 설명 보기 ▾';
+  });
+  const box=document.getElementById('lessonAct');
+  if (id===0) lessonGoal(box);
+  if (id===1) lessonStructure(box);
+  if (id===2) lessonSort(box);
+  if (id===3) lessonSource(box);
+  if (id===4) lessonWhen(box);
+}
+
+/* 🌍 언제 왜 쓸까 — 주장하는 글이 필요한 순간 판별 */
+function lessonWhen(box){
+  const items=[
+    { t:'학교 앞 횡단보도에 신호등이 없어 위험하다. 시청에 신호등을 만들어 달라는 글을 쓰려 한다.', ok:true,  why:'문제를 바꾸려면 읽는 사람(시청)을 설득해야 해요. 주장하는 글의 힘이 필요한 순간!' },
+    { t:'개미의 한살이를 조사해서 친구들에게 알려 주는 글을 쓰려 한다.', ok:false, why:'정보를 알기 쉽게 전하는 글은 설명하는 글이에요.' },
+    { t:'급식을 남기는 친구가 많아, 먹을 만큼만 받자고 학급 게시판에 글을 쓰려 한다.', ok:true,  why:'친구들의 행동을 바꾸고 싶을 때 주장하는 글이 힘을 발휘해요.' },
+    { t:'오늘 현장 체험 학습에서 느낀 점을 쓰려 한다.', ok:false, why:'나의 경험과 감정을 기록하는 글은 일기·감상문이에요.' },
+    { t:'도서관 이용 시간을 늘려 달라고 학생회에 제안하는 글을 쓰려 한다.', ok:true,  why:'학교의 규칙을 바꾸자고 제안할 때 주장하는 글을 써요.' },
+    { t:'새로 산 보드게임의 규칙을 정리해 동생에게 알려 주는 글을 쓰려 한다.', ok:false, why:'방법을 차례대로 알려 주는 글은 설명하는 글이에요.' }
+  ].sort(function(){ return Math.random()-.5; });
+  let idx=0;
+  function draw(){
+    if (idx>=items.length){
+      box.innerHTML='<div class="feedback-big">🌍</div>'+
+        '<p style="text-align:center;font-size:22px;line-height:1.6">주장하는 글은 <b>바꾸고 싶은 문제</b>를 만났을 때,<br>읽는 사람의 마음을 움직이는 <b>나의 힘</b>이에요!</p>'+
+        '<div class="pop-foot"><button class="btn" id="whenDone">알겠어요!</button></div>';
+      document.getElementById('whenDone').addEventListener('click', function(){ lessonReflect(box,4); });
+      return;
+    }
+    const it=items[idx];
+    let dots='';
+    items.forEach(function(_,i){
+      let c='qdot'; if (i<idx) c+=' good'; if (i===idx) c+=' now';
+      dots+='<span class="'+c+'"></span>';
+    });
+    box.innerHTML=
+      '<p style="font-size:19px;margin:2px 0 12px;color:var(--mut)">🌍 이럴 때 <b>주장하는 글</b>이 필요할까요?</p>'+
+      '<div class="quiz-progress" style="margin-bottom:14px">'+dots+'</div>'+
+      '<p class="quiz-q" style="font-size:21px">'+esc(it.t)+'</p>'+
+      '<div class="quiz-opts" id="whenOpts"></div>';
+    const g=document.getElementById('whenOpts');
+    [ {lab:'✊ 주장하는 글이 필요해요', v:true}, {lab:'📖 다른 종류의 글이 어울려요', v:false} ].forEach(function(o){
+      const b=document.createElement('button');
+      b.className='opt'; b.innerHTML='<span>'+o.lab+'</span>';
+      b.addEventListener('click', function(){
+        if (o.v===it.ok){
+          b.classList.add('right');
+          toast(it.why);
+          setTimeout(function(){ idx++; draw(); }, 900);
+        } else {
+          b.classList.add('wrongpick','shake');
+          setTimeout(function(){ b.classList.remove('wrongpick','shake'); }, 600);
+          toast('이 글의 목적을 다시 생각해 보세요. 마음이나 행동을 바꾸려는 글인가요?');
+        }
+      });
+      g.appendChild(b);
+    });
+  }
+  draw();
+}
+
+/* 활동 뒤 공통: 완료 처리 (문제 하나 풀 때마다 글쓰기 정리는 요구하지 않음) */
+function lessonReflect(box, id){
+  const first=!state.concept.done[id];
+  state.concept.done[id]=true;
+  saveLocal(); closePop(); renderConceptGrid(); renderHome();
+  if (first){ confetti(); toast('개념 하나를 내 것으로 만들었어요!'); }
+  sheetLog('개념 완료', CONCEPTS[id].key, '');
+}
+
+/* ① 주장하는 글이란 — 목적 고르기 */
+function lessonGoal(box){
+  box.innerHTML=
+    '<p style="font-size:21px;margin:6px 0">Q. 주장하는 글을 쓰는 <b>가장 큰 목적</b>은 무엇일까요?</p>'+
+    '<div class="quiz-opts" id="goalOpts"></div>';
+  const opts=[
+    { t:'다른 사람의 생각이나 행동을 바꾸도록 설득하기 위해', ok:true },
+    { t:'있었던 일을 시간 순서대로 기록하기 위해', ok:false },
+    { t:'대상의 특징을 있는 그대로 알려 주기 위해', ok:false },
+    { t:'내 느낌을 아름다운 표현으로 나타내기 위해', ok:false }
+  ].sort(function(){ return Math.random()-.5; });
+  const g=document.getElementById('goalOpts');
+  opts.forEach(function(o,i){
+    const b=document.createElement('button');
+    b.className='opt'; b.innerHTML='<span class="on num">'+(i+1)+'</span><span>'+esc(o.t)+'</span>';
+    b.addEventListener('click', function(){
+      if (o.ok){ b.classList.add('right'); setTimeout(function(){ lessonReflect(box,0); },600); }
+      else { b.classList.add('wrongpick','shake'); setTimeout(function(){ b.classList.remove('wrongpick','shake'); },700); toast('다시 생각해 보세요. 주장하는 글의 목적은 무엇일까요?'); }
+    });
+    g.appendChild(b);
+  });
+}
+
+/* ② 짜임 — 예시 글 문단을 서론·본론·결론 자리에 직접 배치 */
+function lessonStructure(box){
+  const paras=DATA.texts.sample.map(function(p,i){ return { i:i, role:p.role.indexOf('본론')===0?'본론':p.role, full:p.role, text:p.text }; });
+  const slots=paras.map(function(p){ return p.role; }); // 서론, 본론×n, 결론 순서 유지
+  const shuffled=paras.slice().sort(function(){ return Math.random()-.5; });
+  let selected=null;
+  const colors={ '서론':'var(--claim)','본론':'var(--reason)','결론':'var(--evid)' };
+
+  box.innerHTML=
+    '<p style="font-size:20px;margin:6px 0">📜 예시 글 문단이 뒤섞였어요! 문단을 <b>골라서</b> 알맞은 자리에 <b>눌러 넣어</b> 짜임을 완성하세요.</p>'+
+    '<div class="two-col" style="align-items:start">'+
+    '<div><h4 style="margin-bottom:8px">뒤섞인 문단</h4><div class="piece-bank" id="bank"></div></div>'+
+    '<div><h4 style="margin-bottom:8px">글의 짜임</h4><div class="slot-board" id="slots"></div></div></div>';
+
+  const bank=document.getElementById('bank'), sb=document.getElementById('slots');
+  const slotEls=[];
+  slots.forEach(function(role, si){
+    const s=document.createElement('button');
+    s.className='slot';
+    s.innerHTML='<span class="slot-label" style="background:'+colors[role]+'">'+role+'</span><span style="font-size:16px;color:var(--mut)">여기에 넣기</span>';
+    s.addEventListener('click', function(){
+      if (s.classList.contains('filled')) return;
+      if (!selected){ toast('먼저 왼쪽에서 문단을 골라 주세요.'); return; }
+      if (selected.p.role===role){
+        s.classList.add('filled');
+        s.innerHTML='<span class="slot-label" style="background:'+colors[role]+'">'+esc(selected.p.full)+'</span><span style="font-size:15px;line-height:1.4">'+esc(selected.p.text.slice(0,46))+'…</span>';
+        selected.el.classList.add('used'); selected.el.classList.remove('sel');
+        selected=null;
+        if (sb.querySelectorAll('.slot.filled').length===slots.length){
+          setTimeout(function(){ lessonReflect(box,1); },650);
+        }
+      } else {
+        s.classList.add('shake'); selected.el.classList.add('shake');
+        const el=selected.el;
+        setTimeout(function(){ s.classList.remove('shake'); el.classList.remove('shake'); },600);
+        el.classList.remove('sel'); selected=null;
+        toast('그 자리가 아니에요. 문단의 역할을 다시 살펴보세요.');
+      }
+    });
+    sb.appendChild(s); slotEls.push(s);
+  });
+  shuffled.forEach(function(p){
+    const b=document.createElement('button');
+    b.className='piece'; b.textContent=p.text.slice(0,64)+'…';
+    b.title=p.text;
+    b.addEventListener('click', function(){
+      if (b.classList.contains('used')) return;
+      bank.querySelectorAll('.piece').forEach(function(x){ x.classList.remove('sel'); });
+      b.classList.add('sel'); selected={ p:p, el:b };
+    });
+    bank.appendChild(b);
+  });
+}
+
+/* ③ 주장·이유·근거 — 문장 분류 */
+function lessonSort(box){
+  const items=[
+    { t:'우리 반 교실에서 분리배출을 실천하자.', k:'주장' },
+    { t:'쓰레기가 줄어 교실이 깨끗해지기 때문이다.', k:'이유' },
+    { t:'환경부(2025) 통계에 따르면 분리배출로 재활용률이 30% 높아졌다.', k:'근거' },
+    { t:'초등학생은 하루 8시간 이상 자야 한다.', k:'주장' },
+    { t:'잠이 부족하면 수업에 집중하기 어렵기 때문이다.', k:'이유' },
+    { t:'○○병원 김 박사는 "초등학생은 최소 8시간 수면이 필요하다."라고 말했다.', k:'근거' },
+    { t:'학교 급식에서 음식을 남기지 말자.', k:'주장' },
+    { t:'버려지는 음식이 많으면 환경에도 나쁜 영향을 주기 때문이다.', k:'이유' },
+    { t:'우리 학교 설문에서 25명 중 18명이 "급식을 남긴 적이 있다"라고 답했다.', k:'근거' },
+    { t:'수업 시간에는 휴대전화를 꺼 두자.', k:'주장' },
+    { t:'집중력이 떨어져 공부에 방해가 되기 때문이다.', k:'이유' }
+  ];
+  const shuffled=items.slice().sort(function(){ return Math.random()-.5; });
+  const colors={ '주장':'var(--claim)','이유':'var(--reason)','근거':'var(--evid)' };
+  let idx=0;
+
+  function renderOne(){
+    if (idx>=shuffled.length){ lessonReflect(box,2); return; }
+    const it=shuffled[idx];
+    let dots='';
+    shuffled.forEach(function(_,i){
+      let cls='qdot';
+      if (i<idx) cls+=' good';
+      if (i===idx) cls+=' now';
+      dots+='<span class="'+cls+'"></span>';
+    });
+    box.innerHTML=
+      '<p style="font-size:19px;margin:2px 0 12px;color:var(--mut)">⚖️ 이 문장은 <b>주장·이유·근거</b> 중 무엇일까요?</p>'+
+      '<div class="quiz-progress" style="margin-bottom:14px">'+dots+'</div>'+
+      '<p class="quiz-q" style="font-size:21px">'+esc(it.t)+'</p>'+
+      '<div class="quiz-opts" id="sortOpts"></div>';
+    const g=document.getElementById('sortOpts');
+    ['주장','이유','근거'].forEach(function(k){
+      const b=document.createElement('button');
+      b.className='opt';
+      b.innerHTML='<span class="on" style="background:'+colors[k]+';color:#fff">'+({'주장':'✊','이유':'💭','근거':'📊'}[k])+'</span><span>'+k+'</span>';
+      b.addEventListener('click', function(){
+        if (k===it.k){
+          b.classList.add('right');
+          setTimeout(function(){ idx++; renderOne(); },550);
+        } else {
+          b.classList.add('wrongpick','shake');
+          setTimeout(function(){ b.classList.remove('wrongpick','shake'); },600);
+          toast(it.k==='근거'?'근거는 누가 보아도 확인할 수 있는 객관적인 자료예요.':'의견인지, 까닭인지, 자료인지 다시 살펴보세요.');
+        }
+      });
+      g.appendChild(b);
+    });
+  }
+  renderOne();
+}
+
+/* ④ 인용과 출처 — 출처 네 조각 맞추기 */
+function lessonSource(box){
+  const answer={ '누가':'보건복지부', '언제':'2025', '자료명':'「어린이 건강 실태 조사」', '실린 곳':'보건복지부 누리집' };
+  const pieces=[
+    { t:'보건복지부', k:'누가' }, { t:'2025', k:'언제' },
+    { t:'「어린이 건강 실태 조사」', k:'자료명' }, { t:'보건복지부 누리집', k:'실린 곳' },
+    { t:'누가 그러던데', k:'없음' }, { t:'인터넷 어딘가', k:'없음' }
+  ].sort(function(){ return Math.random()-.5; });
+  let selected=null, placed=0;
+  box.innerHTML=
+    '<p style="font-size:20px;margin:6px 0">🏷️ 믿을 수 있는 출처가 되도록 <b>네 조각</b>을 알맞은 칸에 넣으세요. 못 쓰는 조각도 섞여 있어요!</p>'+
+    '<div class="piece-bank" id="srcBank" style="flex-direction:row;flex-wrap:wrap;margin-bottom:12px"></div>'+
+    '<div class="slot-board" id="srcSlots" style="position:relative"></div>';
+  const bank=document.getElementById('srcBank'), sb=document.getElementById('srcSlots');
+  Object.keys(answer).forEach(function(k){
+    const s=document.createElement('button');
+    s.className='slot';
+    s.innerHTML='<span class="slot-label" style="background:var(--gold)">'+k+'</span><span style="font-size:16px;color:var(--mut)">여기에 넣기</span>';
+    s.addEventListener('click', function(){
+      if (s.classList.contains('filled')) return;
+      if (!selected){ toast('먼저 위에서 조각을 골라 주세요.'); return; }
+      if (selected.p.k===k){
+        s.classList.add('filled');
+        s.innerHTML='<span class="slot-label" style="background:var(--gold)">'+k+'</span><span style="font-size:17px">'+esc(selected.p.t)+'</span>';
+        selected.el.classList.add('used'); selected.el.classList.remove('sel'); selected=null;
+        placed++;
+        if (placed===4){
+          const st=document.createElement('div'); st.className='stamp';
+          st.innerHTML='출처<br>확인!'; sb.appendChild(st);
+          setTimeout(function(){ lessonReflect(box,3); },1100);
+        }
+      } else {
+        s.classList.add('shake'); selected.el.classList.add('shake');
+        const el=selected.el;
+        setTimeout(function(){ s.classList.remove('shake'); el.classList.remove('shake'); },600);
+        el.classList.remove('sel'); selected=null;
+        toast('그 칸에 맞는 조각이 아니에요. 믿을 수 있는 출처인지 살펴보세요.');
+      }
+    });
+    sb.appendChild(s);
+  });
+  pieces.forEach(function(p){
+    const b=document.createElement('button');
+    b.className='piece'; b.textContent=p.t;
+    b.addEventListener('click', function(){
+      if (b.classList.contains('used')) return;
+      bank.querySelectorAll('.piece').forEach(function(x){ x.classList.remove('sel'); });
+      b.classList.add('sel'); selected={ p:p, el:b };
+    });
+    bank.appendChild(b);
+  });
+}
+
+/* ============================================================
+   근거 탐정 (판별 퀴즈) — 탐구 질문 잠금 → 문제 → 정답률 링
+   ============================================================ */
+function quizRate(){
+  return state.quiz.total ? Math.round(state.quiz.correct/state.quiz.total*100) : 0;
+}
+function enterQuiz(){ startQuiz(); }
+function openInquiry(key, question, subtitle, then){
+  openPop(
+    '<h2>🔍 탐구 질문</h2>'+
+    '<p class="lesson-text" style="font-size:23px;text-align:center">'+esc(question)+'</p>'+
+    '<p style="font-size:18px;color:var(--mut)">'+esc(subtitle)+'</p>'+
+    '<div class="inq-box"><textarea id="inqText" placeholder="내 생각을 10자 이상 적으면 문이 열려요"></textarea></div>'+
+    '<div class="pop-foot"><button class="btn" id="inqBtn" disabled>🔓 문 열기</button></div>',
+    { closeable:true }
+  );
+  const ta=document.getElementById('inqText'), btn=document.getElementById('inqBtn');
+  ta.addEventListener('input', function(){ btn.disabled=ta.value.trim().length<10; });
+  btn.addEventListener('click', function(){
+    state.inquiry[key]=ta.value.trim();
+    if (key==='q1' && !state.inquiry.current) state.inquiry.current=state.inquiry[key];
+    saveLocal();
+    sheetLog('탐구 질문(처음 생각)', question, state.inquiry[key], { inquiryFirst: state.inquiry[key] });
+    closePop(); then();
+  });
+}
+
+let quiz={ list:[], idx:0, review:false };
+function startQuiz(reviewOnly){
+  quiz.review=!!reviewOnly;
+  const all=DATA.texts.quiz;
+  quiz.list = quiz.review ? state.quiz.wrong.map(function(i){ return all[i]; }) : all.slice();
+  quiz.idx=0;
+  if (!quiz.review){ state.quiz={ done:false, answers:[], correct:0, total:all.length, wrong:[], weak:'' }; }
+  document.getElementById('quizMode').textContent = quiz.review ? '오답 다시 수사' : '판별 수사';
+  renderQuizQ(); show('scr-quiz');
+}
+function renderQuizQ(){
+  const stage=document.getElementById('quizStage');
+  if (quiz.idx>=quiz.list.length){ return quiz.review ? renderQuizEnd(true) : finishQuiz(); }
+  const q=quiz.list[quiz.idx];
+  let dots='';
+  quiz.list.forEach(function(_,i){
+    let cls='qdot';
+    if (!quiz.review && i<state.quiz.answers.length) cls += state.quiz.answers[i]?' good':' miss';
+    if (i===quiz.idx) cls+=' now';
+    dots+='<span class="'+cls+'"></span>';
+  });
+  stage.innerHTML=
+    '<div class="quiz-progress">'+dots+'</div>'+
+    '<span class="chip evid quiz-type">🔎 '+esc(q.type)+'</span>'+
+    '<p class="quiz-q">'+esc(q.q)+'</p>'+
+    '<div class="quiz-opts" id="qOpts"></div>';
+  const box=document.getElementById('qOpts');
+  q.o.forEach(function(t,i){
+    const b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML='<span class="on num">'+(i+1)+'</span><span>'+esc(t)+'</span>';
+    b.addEventListener('click', function(){ answerQuiz(q,i+1,b,box); });
+    box.appendChild(b);
+  });
+}
+function answerQuiz(q,pick,btn,box){
+  box.querySelectorAll('.opt').forEach(function(o){ o.disabled=true; });
+  const ok = pick===q.a;
+  if (ok) btn.classList.add('right');
+  else { btn.classList.add('wrongpick','shake'); box.children[q.a-1].classList.add('right'); }
+  if (!quiz.review){
+    state.quiz.answers.push(ok);
+    if (ok) state.quiz.correct++;
+    else state.quiz.wrong.push(DATA.texts.quiz.indexOf(q));
+    saveLocal();
+  }
+  setTimeout(function(){
+    openPop(
+      '<div class="feedback-big">'+(ok?'🎯':'🧐')+'</div>'+
+      '<h2 style="justify-content:center">'+(ok?'정확한 판별이에요!':'단서를 다시 봐요')+'</h2>'+
+      '<p class="lesson-text">'+esc(q.exp)+'</p>'+
+      '<div class="pop-foot"><button class="btn" id="qNext">'+(quiz.idx+1<quiz.list.length?'다음 사건 →':'수사 결과 보기')+'</button></div>',
+      { closeable:false }
+    );
+    document.getElementById('qNext').addEventListener('click', function(){
+      closePop(); quiz.idx++; renderQuizQ();
+    });
+  }, 750);
+}
+function weakType(){
+  const per={};
+  DATA.texts.quiz.forEach(function(q,i){
+    per[q.type]=per[q.type]||{ ok:0, n:0 };
+    per[q.type].n++;
+    if (state.quiz.answers[i]) per[q.type].ok++;
+  });
+  let worst='', rate=1.01;
+  Object.keys(per).forEach(function(k){
+    const r=per[k].ok/per[k].n;
+    if (r<rate){ rate=r; worst=k; }
+  });
+  return rate>=1 ? '' : worst;
+}
+function finishQuiz(){
+  state.quiz.done=true;
+  state.quiz.weak=weakType();
+  saveLocal(); renderHome();
+  sheetLog('판별 퀴즈 완료', '정답률 '+quizRate()+'% ('+state.quiz.correct+'/'+state.quiz.total+')', '', {
+    quizDone:true, quizRate:quizRate(), quizCorrect:state.quiz.correct, quizTotal:state.quiz.total, weak: state.quiz.weak||'-'
+  });
+  if (quizRate()>=80) confetti();
+  renderQuizEnd(false);
+}
+function renderQuizEnd(fromReview){
+  const stage=document.getElementById('quizStage');
+  const rate=quizRate();
+  const C=2*Math.PI*76;
+  stage.innerHTML=
+    '<h2 style="text-align:center;font-size:30px">'+(fromReview?'오답 수사를 끝냈어요!':'수사 결과')+'</h2>'+
+    '<div class="result-cols">'+
+    '<div class="ring-wrap"><svg viewBox="0 0 190 190">'+
+    '<circle class="ring-bg" cx="95" cy="95" r="76"></circle>'+
+    '<circle class="ring-val" id="ringVal" cx="95" cy="95" r="76" stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'"></circle>'+
+    '<text x="95" y="103" text-anchor="middle" class="ring-num" id="ringNum" fill="var(--claim-deep)" font-family="Jua">0%</text>'+
+    '</svg><span style="font-size:18px;color:var(--mut)">판별 정답률</span></div>'+
+    '<div class="weak-box" id="weakBox"></div>'+
+    '</div>'+
+    '<div class="btn-row" id="quizEndBtns"></div>';
+  requestAnimationFrame(function(){
+    document.getElementById('ringVal').style.strokeDashoffset = C*(1-rate/100);
+    let n=0;
+    const t=setInterval(function(){
+      n=Math.min(rate, n+3);
+      document.getElementById('ringNum').textContent=n+'%';
+      if (n>=rate) clearInterval(t);
+    }, 24);
+  });
+  const wb=document.getElementById('weakBox');
+  let wh='<span>맞은 개수 <b class="num">'+state.quiz.correct+' / '+state.quiz.total+'</b></span>';
+  if (state.quiz.weak) wh+='<span>더 연습할 부분 — <b style="color:var(--claim-deep)">'+esc(state.quiz.weak)+'</b></span><span style="font-size:17px;color:var(--mut)">이 유형의 사건을 다시 수사해서 눈을 더 날카롭게 만들어요.</span>';
+  else wh+='<span style="color:var(--ok)">모든 유형을 완벽하게 판별했어요! 근거를 보는 눈이 예리해요. 🔦</span>';
+  wb.innerHTML=wh;
+  const btns=document.getElementById('quizEndBtns');
+  if (state.quiz.wrong.length && !fromReview){
+    const b=document.createElement('button');
+    b.className='btn evid'; b.textContent='🔁 틀린 사건 다시 수사 ('+state.quiz.wrong.length+')';
+    b.addEventListener('click', function(){ startQuiz(true); });
+    btns.appendChild(b);
+  }
+  const h=document.createElement('button');
+  h.className='btn'; h.textContent='🔨 주장하는 글 쓰기 공방으로 가기';
+  h.addEventListener('click', function(){ enterWorkshop(); });
+  btns.appendChild(h);
+  const hm=document.createElement('button');
+  hm.className='btn ghost'; hm.textContent='🏠 홈으로';
+  hm.addEventListener('click', function(){ saveLocal(); renderHome(); show('scr-home'); });
+  btns.appendChild(hm);
+}
+
+/* ============================================================
+   주장하는 글 쓰기 공방 — 5단계
+   ============================================================ */
+const STEPS=['계획하기','내용 생성하기','내용 조직하기','표현하기','고쳐쓰기'];
+function enterWorkshop(){
+  renderRail(); fillStepInputs(); gotoStep(state.ws.step, true); show('scr-workshop');
+}
+function renderRail(){
+  const rail=document.getElementById('rail'); rail.innerHTML='';
+  STEPS.forEach(function(name,i){
+    const n=i+1;
+    if (i>0){
+      const lk=document.createElement('span');
+      lk.className='rlink'+(state.ws.maxStep>n-1?' done':'');
+      rail.appendChild(lk);
+    }
+    const st=document.createElement('button');
+    let cls='rstep';
+    if (n===state.ws.step) cls+=' now';
+    else if (n<state.ws.maxStep || (n<=state.ws.maxStep && n<state.ws.step)) cls+=' done';
+    else if (n>state.ws.maxStep) cls+=' lock';
+    else cls+=' done';
+    st.className=cls;
+    st.innerHTML='<span class="rdot">'+n+(state.ws.changedAt && n>state.ws.changedAt && n!==state.ws.step ? '<span class="rebadge">재료가 바뀌었어요</span>':'')+'</span><span class="rname">'+name+'</span>';
+    st.addEventListener('click', function(){
+      if (n<=state.ws.maxStep && n!==state.ws.step) gotoStep(n);
+      else if (n>state.ws.maxStep) toast('앞 단계를 먼저 마치면 열려요.');
+    });
+    rail.appendChild(st);
+  });
+}
+function gotoStep(n, silent){
+  state.ws.step=n;
+  if (state.ws.changedAt && n>state.ws.changedAt) state.ws.changedAt = (n>=state.ws.maxStep) ? 0 : state.ws.changedAt;
+  document.querySelectorAll('.step-panel').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById('step'+n).classList.add('on');
+  if (n===2){ document.getElementById('step2Claim').textContent=state.ws.claim; renderReasons(); }
+  if (n===3) renderLogicMap();
+  if (n===4) renderWrite();
+  if (n===5) renderPolish();
+  renderRail(); saveLocal();
+  if (!silent) window.scrollTo(0,0);
+}
+function markChanged(fromStep){
+  if (state.ws.maxStep>fromStep) state.ws.changedAt=fromStep;
+}
+
+/* ----- 1단계 계획하기 ----- */
+function fillStepInputs(){
+  document.getElementById('inProblem').value=state.ws.problem;
+  document.getElementById('inReader').value=state.ws.reader;
+  document.getElementById('inClaim').value=state.ws.claim;
+  document.getElementById('inIntroMemo').value=state.ws.introMemo;
+  document.getElementById('inConcMemo').value=state.ws.concMemo;
+  document.getElementById('inTitle').value=state.ws.title;
+  document.getElementById('inLearned').value=state.ws.learned;
+}
+['inProblem','inReader','inClaim'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', function(){
+    state.ws.problem=document.getElementById('inProblem').value;
+    state.ws.reader=document.getElementById('inReader').value;
+    state.ws.claim=document.getElementById('inClaim').value;
+    markChanged(1); saveLocal();
+  });
+});
+document.getElementById('inIntroMemo').addEventListener('input', function(){ state.ws.introMemo=this.value; markChanged(3); saveLocal(); });
+document.getElementById('inConcMemo').addEventListener('input', function(){ state.ws.concMemo=this.value; markChanged(3); saveLocal(); });
+
+document.getElementById('toStep2').addEventListener('click', function(){
+  if (state.ws.problem.trim().length<5){ toast('문제 상황을 조금 더 자세히 적어 주세요.'); return; }
+  if (!state.ws.reader.trim()){ toast('읽을 사람을 적어 주세요.'); return; }
+  if (state.ws.claim.trim().length<5){ toast('주장을 한 문장으로 분명하게 적어 주세요.'); return; }
+  if (state.ws.reasons.length===0) addReason();
+  state.ws.maxStep=Math.max(state.ws.maxStep,2); gotoStep(2);
+});
+
+/* ----- 2단계 내용 생성하기 ----- */
+function addReason(){
+  const emptyIdx=state.ws.reasons.findIndex(function(r){ return !r.text.trim(); });
+  if (emptyIdx>=0){
+    toast('비어 있는 이유 '+(emptyIdx+1)+' 칸부터 채워 주세요.');
+    rIdx=emptyIdx; renderReasons();
+    const card=document.querySelector('#reasonList .reason-card');
+    if (card){
+      card.classList.add('shake');
+      setTimeout(function(){ card.classList.remove('shake'); },600);
+      const inp=card.querySelector('.rc-head input');
+      if (inp) inp.focus();
+    }
+    return;
+  }
+  if (state.ws.reasons.length>=3){ toast('이유 칸은 3개까지예요. 가장 힘센 이유만 남겨요.'); return; }
+  state.ws.reasons.push({ text:'', because:'', evids:[] });
+  rIdx=state.ws.reasons.length-1;
+  renderReasons(); saveLocal();
+  const inp=document.querySelector('#reasonList .rc-head input');
+  if (inp) inp.focus();
+}
+
+function srcDone(e){ return !!(e.who.trim() && e.when.trim() && e.what.trim() && e.where.trim()); }
+function countEvid(){ let n=0; state.ws.reasons.forEach(function(r){ n+=r.evids.length; }); return n; }
+function countSrc(){ let n=0; state.ws.reasons.forEach(function(r){ r.evids.forEach(function(e){ if(srcDone(e)) n++; }); }); return n; }
+
+const EVID_TYPES=['수치 자료','전문가 의견','조사 결과','책·기사'];
+let gateMarked=false; // '다음' 시도에서 막힌 적이 있으면 부족한 카드를 계속 표시
+let rIdx=0; // 지금 보고 있는 이유 번호
+function reasonDone(r){
+  return !!(r.text.trim() && r.because.trim() && r.evids.some(function(e){ return e.text.trim(); }));
+}
+function renderReasons(){
+  const list=document.getElementById('reasonList'); list.innerHTML='';
+  if (!state.ws.reasons.length){ updateMatbar(); return; }
+  if (rIdx>=state.ws.reasons.length) rIdx=state.ws.reasons.length-1;
+  if (rIdx<0) rIdx=0;
+  const g=gateMarked ? step2Gate() : null;
+
+  // ── 이유 탭: 하나씩 넘겨 보기 ──
+  const tabs=document.createElement('div'); tabs.className='rtabs';
+  state.ws.reasons.forEach(function(r,i){
+    const t=document.createElement('button');
+    t.className='rtab'+(i===rIdx?' on':'');
+    if (g && g.missing.concat(g.noText).concat(g.noBecause).some(function(m){ return m.i===i; })) t.classList.add('need');
+    t.innerHTML='<b>이유 '+(i+1)+'</b>'
+      +(r.text.trim()?'<span class="rtab-t">'+esc(r.text.trim())+'</span>':'')
+      +(reasonDone(r)?'<span class="rtab-ok">✓</span>':'');
+    t.addEventListener('click', function(){ rIdx=i; renderReasons(); });
+    tabs.appendChild(t);
+  });
+  if (state.ws.reasons.length<3){
+    const plus=document.createElement('button');
+    plus.className='rtab plus'; plus.textContent='＋ 이유 추가';
+    plus.addEventListener('click', function(){ addReason(); markChanged(2); });
+    tabs.appendChild(plus);
+  }
+  list.appendChild(tabs);
+
+  // ── 현재 이유 카드 한 장 ──
+  const ri=rIdx, r=state.ws.reasons[ri];
+  const card=document.createElement('div'); card.className='reason-card';
+  if (g && g.missing.concat(g.noText).concat(g.noBecause).some(function(m){ return m.i===ri; })) card.classList.add('need');
+
+  const head=document.createElement('div'); head.className='rc-head';
+  head.innerHTML='<span class="rtag">이유 '+(ri+1)+'</span>';
+  const inp=document.createElement('input');
+  inp.type='text'; inp.value=r.text; inp.placeholder='이유를 짧게 — 예) 복도에서 뛰면 다쳐요 (안전)';
+  function syncEmpty(){ inp.classList.toggle('empty', !inp.value.trim()); }
+  inp.addEventListener('input', function(){ r.text=inp.value; markChanged(2); saveLocal(); updateMatbar(); syncEmpty(); });
+  syncEmpty();
+  head.appendChild(inp);
+  const del=document.createElement('button'); del.className='rc-del'; del.textContent='🗑'; del.setAttribute('aria-label','이유 지우기');
+  del.addEventListener('click', function(){
+    state.ws.reasons.splice(ri,1); if (rIdx>0) rIdx--; markChanged(2); renderReasons(); saveLocal();
+  });
+  head.appendChild(del);
+  card.appendChild(head);
+
+  // 왜냐하면 문장
+  const bc=document.createElement('div'); bc.className='rc-because';
+  const btag=document.createElement('span'); btag.className='bc-tag'; btag.textContent='왜냐하면 ─';
+  const binp=document.createElement('input');
+  binp.type='text'; binp.value=r.because;
+  binp.placeholder='…기 때문이다. — 예) 뛰다가 부딪혀 다치는 친구가 많기 때문이다.';
+  function syncEmptyB(){ binp.classList.toggle('empty', !binp.value.trim()); }
+  binp.addEventListener('input', function(){ r.because=binp.value; markChanged(2); saveLocal(); updateMatbar(); syncEmptyB(); });
+  syncEmptyB();
+  bc.appendChild(btag); bc.appendChild(binp);
+  card.appendChild(bc);
+
+  const body=document.createElement('div'); body.className='rc-body';
+  r.evids.forEach(function(e, ei){
+    body.appendChild(renderEvid(r,e,ri,ei));
+  });
+  const add=document.createElement('button');
+  add.className='add-line evid'; add.textContent='＋ 근거 붙이기';
+  add.addEventListener('click', function(){
+    r.evids.push({ text:'', type:'', who:'', when:'', what:'', where:'' });
+    markChanged(2); renderReasons(); saveLocal();
+  });
+  body.appendChild(add);
+  card.appendChild(body);
+  list.appendChild(card);
+  updateMatbar();
+}
+function renderEvid(r,e,ri,ei){
+  const box=document.createElement('div'); box.className='evid-card';
+  const top=document.createElement('div'); top.className='ec-top';
+  const ta=document.createElement('textarea');
+  ta.value=e.text; ta.placeholder='이유를 뒷받침하는 객관적인 자료를 적어요';
+  ta.addEventListener('input', function(){ e.text=ta.value; markChanged(2); saveLocal(); updateMatbar(); });
+  top.appendChild(ta);
+  const del=document.createElement('button'); del.className='ec-del'; del.textContent='🗑'; del.setAttribute('aria-label','근거 지우기');
+  del.addEventListener('click', function(){ r.evids.splice(ei,1); markChanged(2); renderReasons(); saveLocal(); });
+  top.appendChild(del);
+  box.appendChild(top);
+
+  const tr=document.createElement('div'); tr.className='ec-type';
+  EVID_TYPES.forEach(function(t){
+    const c=document.createElement('button');
+    c.className='type-chip'+(e.type===t?' sel':'');
+    c.textContent=t;
+    c.addEventListener('click', function(){
+      e.type = e.type===t ? '' : t;
+      markChanged(2); saveLocal();
+      tr.querySelectorAll('.type-chip').forEach(function(x){ x.classList.remove('sel'); });
+      if (e.type) c.classList.add('sel');
+    });
+    tr.appendChild(c);
+  });
+  box.appendChild(tr);
+
+  const sz=document.createElement('div'); sz.className='src-zone';
+  sz.innerHTML='<span class="src-title"><span>🏷️ 출처 네 칸을 모두 채우면 도장이 찍혀요</span></span>';
+  const grid=document.createElement('div'); grid.className='src-grid';
+  [['who','누가(기관)'],['when','언제'],['what','자료명'],['where','실린 곳']].forEach(function(f){
+    const i=document.createElement('input');
+    i.type='text'; i.placeholder=f[1]; i.value=e[f[0]];
+    i.addEventListener('input', function(){
+      const was=srcDone(e);
+      e[f[0]]=i.value; markChanged(2); saveLocal();
+      const now=srcDone(e);
+      if (now && !was){
+        const st=document.createElement('div'); st.className='stamp'; st.innerHTML='출처<br>확인!';
+        box.appendChild(st); toast('출처 확인 도장을 받았어요! 🏷️');
+      } else if (!now && was){
+        const old=box.querySelector('.stamp'); if (old) old.remove();
+      }
+      updateMatbar();
+    });
+    grid.appendChild(i);
+  });
+  sz.appendChild(grid);
+  box.appendChild(sz);
+  if (srcDone(e)){
+    const st=document.createElement('div'); st.className='stamp'; st.style.animation='none'; st.innerHTML='출처<br>확인!';
+    box.appendChild(st);
+  }
+  return box;
+}
+function updateMatbar(){
+  const g=step2Gate();
+  const mr=document.getElementById('matReasons'), me=document.getElementById('matEvids');
+  const rOk=g.okReasons && g.noText.length===0;
+  mr.textContent=(rOk?'✔ ':'')+'이유 '+g.reasonCount+'개'
+    +(g.noText.length?' — 이유 '+g.noText.map(function(m){return m.i+1;}).join('·')+' 칸이 비었어요'
+    :(g.okReasons?'':' (2개 이상)'));
+  mr.classList.toggle('met', rOk); mr.classList.toggle('unmet', !rOk);
+  me.textContent=(g.missing.length===0&&countEvid()>0?'✔ ':'')+'근거 '+countEvid()+'개'+(g.missing.length?' (없는 이유 '+g.missing.length+')':'');
+  me.classList.toggle('met', g.missing.length===0&&countEvid()>0); me.classList.toggle('unmet', g.missing.length>0);
+  document.getElementById('matSrcs').textContent='출처 확인 '+countSrc()+'개';
+  // 입력이 바뀌면 빨간 표시도 갱신
+  const bad=g.missing.concat(g.noText).concat(g.noBecause||[]);
+  document.querySelectorAll('#reasonList .rtab:not(.plus)').forEach(function(t,i){
+    if (t.classList.contains('need') && !bad.some(function(m){ return m.i===i; })) t.classList.remove('need');
+    const r=state.ws.reasons[i];
+    if (r){
+      t.innerHTML='<b>이유 '+(i+1)+'</b>'
+        +(r.text.trim()?'<span class="rtab-t">'+esc(r.text.trim())+'</span>':'')
+        +(reasonDone(r)?'<span class="rtab-ok">✓</span>':'');
+    }
+  });
+  const curCard=document.querySelector('#reasonList .reason-card');
+  if (curCard && curCard.classList.contains('need') && !bad.some(function(m){ return m.i===rIdx; })) curCard.classList.remove('need');
+}
+function step2Gate(){
+  const rs=state.ws.reasons.filter(function(r){ return r.text.trim(); });
+  const missing=state.ws.reasons
+    .map(function(r,i){ return { i:i, bad: r.text.trim() && !r.evids.some(function(e){ return e.text.trim(); }) }; })
+    .filter(function(x){ return x.bad; });
+  const noText=state.ws.reasons
+    .map(function(r,i){ return { i:i, bad: !r.text.trim() && (r.because.trim() || r.evids.some(function(e){ return e.text.trim(); })) }; })
+    .filter(function(x){ return x.bad; });
+  const noBecause=state.ws.reasons
+    .map(function(r,i){ return { i:i, bad: r.text.trim() && !r.because.trim() }; })
+    .filter(function(x){ return x.bad; });
+  return {
+    okReasons: rs.length>=2, reasonCount: rs.length,
+    missing: missing, noText: noText, noBecause: noBecause,
+    ok: rs.length>=2 && missing.length===0 && noText.length===0 && noBecause.length===0
+  };
+}
+function showGatePop(g){
+  const li=function(ok, text){ return '<div class="fi"><span class="fic">'+(ok?'✅':'❌')+'</span><span>'+text+'</span></div>'; };
+  let h='<h2>🚪 다음 단계로 가려면</h2><div class="fulfil" style="margin:8px 0">';
+  h+=li(g.okReasons, '이유를 2개 이상 적어요 — 지금 <b class="num">'+g.reasonCount+'</b>개');
+  h+=li(g.noText.length===0, '내용을 적기 시작한 이유 칸에는 <b>이유 제목</b>도 적어요'+(g.noText.length?' — <b style="color:var(--bad)">'+g.noText.map(function(m){ return '이유 '+(m.i+1); }).join(', ')+'</b> 칸이 비어 있어요 (근거만 있어요!)':''));
+  h+=li(g.noBecause.length===0, '이유마다 <b>왜냐하면</b> 문장을 적어요'+(g.noBecause.length?' — <b style="color:var(--bad)">'+g.noBecause.map(function(m){ return '이유 '+(m.i+1); }).join(', ')+'</b>':''));
+  h+=li(g.missing.length===0, '모든 이유에 근거를 하나 이상 붙여요'+(g.missing.length?' — <b style="color:var(--bad)">'+g.missing.map(function(m){ return '이유 '+(m.i+1); }).join(', ')+'</b>에 근거가 없어요':''));
+  h+='</div><p style="font-size:18px;color:var(--mut)">근거가 없는 이유 카드는 <b style="color:var(--bad)">빨간 테두리</b>로 표시해 두었어요. <b>＋ 근거 붙이기</b>를 눌러 채워 주세요.</p>';
+  h+='<div class="pop-foot"><button class="btn" onclick="closePop()">채우러 가기</button></div>';
+  openPop(h);
+}
+document.getElementById('toStep3').addEventListener('click', function(){
+  const g=step2Gate();
+  // 근거 없는 이유 카드 표시
+  if (!g.ok){ gateMarked=true; renderReasons(); showGatePop(g); return; }
+  gateMarked=false;
+  state.ws.reasons=state.ws.reasons.filter(function(r){ return r.text.trim() || r.because.trim() || r.evids.some(function(e){ return e.text.trim(); }); });
+  state.ws.maxStep=Math.max(state.ws.maxStep,3); gotoStep(3);
+});
+
+/* ----- 3단계 내용 조직하기 : 논리 지도 SVG ----- */
+function wrapSvgText(t, max){
+  t=String(t||'').trim();
+  if (!t) return ['(비어 있음)'];
+  const out=[];
+  for (let i=0;i<t.length && out.length<2;i+=max) out.push(t.slice(i,i+max));
+  if (t.length>max*2) out[1]=out[1].slice(0,max-1)+'…';
+  return out;
+}
+function renderLogicMap(){
+  const box=document.getElementById('logicMap');
+  const reasons=state.ws.reasons.filter(function(r){ return r.text.trim(); });
+  const cols=Math.max(reasons.length,1);
+  const W=980, colW=W/cols;
+  let maxEv=1;
+  reasons.forEach(function(r){ maxEv=Math.max(maxEv, r.evids.filter(function(e){return e.text.trim();}).length||1); });
+
+  const cx=W/2, cy=70;
+  // 주장 문장 알약 (도장 아래, 크고 또렷하게)
+  const claimLines=wrapSvgText(state.ws.claim, 26);
+  const cfs=24, clh=33;
+  const longest=claimLines.reduce(function(m,l){ return Math.max(m,l.length); },1);
+  const pillW=Math.min(W-60, longest*cfs*0.98+60);
+  const pillH=claimLines.length*clh+22;
+  const pillY=cy+62;
+  const pillBot=pillY+pillH;
+  const ry=pillBot+74;                      // 이유 상자 중심 y
+  const H=ry+60+maxEv*96+26;
+
+  let s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="주장과 이유, 근거의 논리 지도">';
+  s+='<defs><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#B93A10" flood-opacity="0.18"/></filter></defs>';
+
+  // 관계선 (주장 알약 → 이유)
+  reasons.forEach(function(r,i){
+    const rx=colW*i+colW/2;
+    s+='<path d="M '+cx+' '+pillBot+' C '+cx+' '+(pillBot+44)+', '+rx+' '+(ry-78)+', '+rx+' '+(ry-34)+'" fill="none" stroke="#E8A98F" stroke-width="5" stroke-linecap="round"/>';
+  });
+
+  // 주장 도장
+  s+='<g filter="url(#soft)"><circle cx="'+cx+'" cy="'+cy+'" r="54" fill="#E8501F"/><circle cx="'+cx+'" cy="'+cy+'" r="45" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-dasharray="6 6"/></g>';
+  s+='<text x="'+cx+'" y="'+(cy+7)+'" text-anchor="middle" fill="#fff" font-size="22" font-family="Jua">주장</text>';
+
+  // 주장 문장 알약
+  s+='<g filter="url(#soft)"><rect x="'+(cx-pillW/2)+'" y="'+pillY+'" width="'+pillW+'" height="'+pillH+'" rx="'+Math.min(26,pillH/2)+'" fill="#FFF3EC" stroke="#E8501F" stroke-width="3.5"/></g>';
+  claimLines.forEach(function(ln,i){
+    s+='<text x="'+cx+'" y="'+(pillY+30+i*clh)+'" text-anchor="middle" fill="#B93A10" font-size="'+cfs+'" font-family="Jua">'+esc(ln)+'</text>';
+  });
+
+  // 이유 & 근거
+  reasons.forEach(function(r,i){
+    const rx=colW*i+colW/2, bw=Math.min(colW-36, 300);
+    s+='<rect x="'+(rx-bw/2)+'" y="'+(ry-34)+'" width="'+bw+'" height="72" rx="18" fill="#FDECD2" stroke="#D97706" stroke-width="3"/>';
+    s+='<text x="'+rx+'" y="'+(ry-10)+'" text-anchor="middle" fill="#9A5A05" font-size="15" font-family="Jua">이유 '+(i+1)+'</text>';
+    wrapSvgText(r.text, Math.floor(bw/15)).forEach(function(ln,li){
+      s+='<text x="'+rx+'" y="'+(ry+12+li*20)+'" text-anchor="middle" fill="#6B4A12" font-size="15" font-family="Jua">'+esc(ln)+'</text>';
+    });
+    const evs=r.evids.filter(function(e){ return e.text.trim(); });
+    evs.forEach(function(e,ei){
+      const ey=ry+80+ei*96;
+      const ok=srcDone(e);
+      s+='<path d="M '+rx+' '+(ry+38)+' L '+rx+' '+(ey)+'" stroke="'+(ok?'#7CC4B6':'#CFCFCF')+'" stroke-width="4" stroke-linecap="round"'+(ok?'':' stroke-dasharray="7 7"')+'/>';
+      s+='<g opacity="'+(ok?1:.45)+'">';
+      s+='<rect x="'+(rx-bw/2)+'" y="'+ey+'" width="'+bw+'" height="76" rx="14" fill="#D9F0EB" stroke="#0E7C6B" stroke-width="2.5"/>';
+      s+='<text x="'+(rx-bw/2+14)+'" y="'+(ey+24)+'" fill="#0A5D50" font-size="14" font-family="Jua">근거'+(e.type?' · '+esc(e.type):'')+'</text>';
+      wrapSvgText(e.text, Math.floor(bw/13)).forEach(function(ln,li){
+        s+='<text x="'+(rx-bw/2+14)+'" y="'+(ey+46+li*19)+'" fill="#134E44" font-size="14" font-family="Jua">'+esc(ln)+'</text>';
+      });
+      s+='</g>';
+      if (ok){
+        s+='<g transform="translate('+(rx+bw/2-16)+','+(ey+6)+') rotate(12)">'+
+           '<circle r="26" fill="#E9A319"/><circle r="20" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" stroke-dasharray="4 4"/>'+
+           '<text y="-1" text-anchor="middle" fill="#fff" font-size="11" font-family="Jua">출처</text>'+
+           '<text y="12" text-anchor="middle" fill="#fff" font-size="11" font-family="Jua">확인!</text></g>';
+      }
+    });
+    if (!evs.length){
+      s+='<text x="'+rx+'" y="'+(ry+96)+'" text-anchor="middle" fill="#B3261E" font-size="15" font-family="Jua">⚠ 근거가 아직 없어요</text>';
+    }
+  });
+  s+='</svg>';
+  box.innerHTML=s;
+}
+document.getElementById('toStep4').addEventListener('click', function(){
+  if (!state.ws.title.trim()){ toast('글 제목을 지어 주세요.'); document.getElementById('inTitle').focus(); return; }
+  if (state.ws.introMemo.trim().length<5 || state.ws.concMemo.trim().length<5){
+    toast('서론 메모와 결론 메모를 간단히라도 적어 주세요.'); return;
+  }
+  const bodies=state.ws.paras.bodies;
+  while (bodies.length < state.ws.reasons.length) bodies.push('');
+  bodies.length = Math.max(state.ws.reasons.length, 0);
+  state.ws.maxStep=Math.max(state.ws.maxStep,4); gotoStep(4);
+});
+
+/* ----- 4단계 표현하기 ----- */
+function renderWrite(){
+  // 내가 조직한 내용 — 왼쪽 레일, 누르면 아래로 펼침
+  const bl=document.getElementById('boneList');
+  function evidBtn(e){
+    const short=e.text.length>44 ? e.text.slice(0,44)+'…' : e.text;
+    return '<button class="bnr-e"><span class="be-ic">'+(srcDone(e)?'🏷️':'▫️')+'</span><span>'+esc(short)+'</span></button>';
+  }
+  const boneItems=[
+    { cls:'claim', label:'✊ 주장', snip:state.ws.claim,
+      html:'<div class="bn-claim"><b>✊ 주장</b> '+esc(state.ws.claim)+'</div>' },
+    { cls:'memo', label:'📝 서론 메모', snip:state.ws.introMemo,
+      html:'<div class="bn-memo"><b>서론 메모</b>'+esc(state.ws.introMemo)+'</div>' }
+  ];
+  state.ws.reasons.forEach(function(r,i){
+    let h='<div class="bn-reason">';
+    h+='<div class="bnr-h"><span class="bnr-tag">이유 '+(i+1)+'</span><b>'+esc(r.text)+'</b></div>';
+    if (r.because.trim()) h+='<div class="bnr-b">왜냐하면 ─ '+esc(r.because)+'</div>';
+    r.evids.forEach(function(e){ if (e.text.trim()) h+=evidBtn(e); });
+    h+='</div>';
+    boneItems.push({ cls:'reason', label:'💭 이유 '+(i+1), snip:r.text, html:h, rIdx:i });
+  });
+  boneItems.push({ cls:'memo', label:'📝 결론 메모', snip:state.ws.concMemo,
+    html:'<div class="bn-memo"><b>결론 메모</b>'+esc(state.ws.concMemo)+'</div>' });
+
+  bl.innerHTML='';
+  function closeAllBones(){
+    bl.querySelectorAll('.bone-item.on').forEach(function(x){ x.classList.remove('on'); });
+  }
+  boneItems.forEach(function(it){
+    const box=document.createElement('div');
+    box.className='bone-item '+it.cls;
+    const head=document.createElement('button');
+    head.className='bi-head';
+    head.innerHTML='<span class="bi-label">'+it.label+'<span class="arrow">▸</span></span>'
+      +(it.snip.trim()?'<span class="bi-snip">'+esc(it.snip)+'</span>':'');
+    const body=document.createElement('div');
+    body.className='bi-body';
+    body.innerHTML=it.html;
+    head.addEventListener('click', function(){
+      const wasOn=box.classList.contains('on');
+      closeAllBones();
+      if (!wasOn) box.classList.add('on');
+    });
+    // 근거 클릭 → 전문 팝업
+    if (it.rIdx!==undefined){
+      const r=state.ws.reasons[it.rIdx];
+      const evs=r.evids.filter(function(e){ return e.text.trim(); });
+      body.querySelectorAll('.bnr-e').forEach(function(btn, ei){
+        btn.addEventListener('click', function(){
+          const e=evs[ei];
+          let h='<h2>📊 근거'+(e.type?' <span class="chip evid" style="font-size:16px">'+esc(e.type)+'</span>':'')+'</h2>';
+          h+='<p class="lesson-text" style="font-size:21px">'+esc(e.text)+'</p>';
+          if (srcDone(e)) h+='<div class="example-para"><b>🏷️ 출처</b>'+esc(e.who)+' · '+esc(e.when)+' · 「'+esc(e.what)+'」 · '+esc(e.where)+'</div>';
+          h+='<div class="pop-foot"><button class="btn" onclick="closePop()">닫기</button></div>';
+          openPop(h);
+        });
+      });
+    }
+    box.appendChild(head); box.appendChild(body);
+    bl.appendChild(box);
+  });
+
+  // 문단 카드
+  const pl=document.getElementById('paraList'); pl.innerHTML='';
+  function paraCard(title, color, chips, value, hint, onInput){
+    const card=document.createElement('div'); card.className='para-card';
+    const head=document.createElement('div'); head.className='pc-head'; head.style.background=color;
+    head.innerHTML='<span>'+title+'</span>';
+    card.appendChild(head);
+    if (chips && chips.length){
+      const cw=document.createElement('div'); cw.className='pc-chips';
+      chips.forEach(function(c){
+        const sp=document.createElement(c.pop?'button':'span');
+        sp.className='chip '+c.cls+(c.pop?' clickable':'');
+        sp.textContent=c.t;
+        if (c.pop) sp.addEventListener('click', c.pop);
+        cw.appendChild(sp);
+      });
+      card.appendChild(cw);
+    }
+    const ta=document.createElement('textarea');
+    ta.value=value; ta.placeholder=hint;
+    const cnt=document.createElement('div'); cnt.className='pc-count';
+    function upd(){ cnt.innerHTML='<span class="num">'+ta.value.trim().length+'</span>자'; }
+    ta.addEventListener('input', function(){ onInput(ta.value); upd(); markChanged(4); saveLocal(); });
+    upd();
+    card.appendChild(ta); card.appendChild(cnt);
+    return card;
+  }
+  pl.appendChild(paraCard('서론 — 문제 상황과 주장','var(--claim)',
+    [{cls:'claim',t:'주장: '+state.ws.claim.slice(0,24), pop:function(){
+      openPop('<h2>✊ 나의 주장</h2><p class="lesson-text" style="font-size:22px">'+esc(state.ws.claim)+'</p>'+
+        '<div class="pop-foot"><button class="btn" onclick="closePop()">닫기</button></div>');
+    }}],
+    state.ws.paras.intro,'문제 상황을 밝히고 주장을 분명하게 적어요',
+    function(v){ state.ws.paras.intro=v; }));
+  state.ws.reasons.forEach(function(r,i){
+    const chips=[{cls:'reason',t:'이유 '+(i+1)+': '+r.text.slice(0,22), pop:function(){
+      openPop('<h2>💭 이유 '+(i+1)+'</h2><p class="lesson-text" style="font-size:22px">'+esc(r.text)+(r.because.trim()?'<br><span style="font-size:20px;color:var(--mut)">왜냐하면 ─ '+esc(r.because)+'</span>':'')+'</p>'+
+        '<div class="pop-foot"><button class="btn" onclick="closePop()">닫기</button></div>');
+    }}];
+    r.evids.forEach(function(e, ei){
+      if (!e.text.trim()) return;
+      chips.push({cls: srcDone(e)?'gold':'evid', t:(srcDone(e)?'🏷️ ':'')+ (e.type||'근거'), pop:function(){
+        let h='<h2>📊 이유 '+(i+1)+'의 근거'+(e.type?' <span class="chip evid" style="font-size:16px">'+esc(e.type)+'</span>':'')+'</h2>';
+        h+='<p class="lesson-text" style="font-size:21px">'+esc(e.text)+'</p>';
+        if (srcDone(e)){
+          h+='<div class="example-para"><b>🏷️ 출처 확인!</b>'+esc(e.who)+' · '+esc(e.when)+' · 「'+esc(e.what)+'」 · '+esc(e.where)+'</div>';
+          h+='<p style="font-size:17px;color:var(--mut)">글에 인용할 때 이 출처를 함께 밝혀요.</p>';
+        } else {
+          h+='<p style="font-size:17px;color:var(--bad)">⚠ 아직 출처 네 칸을 다 채우지 않았어요. 2단계에서 채우면 도장이 찍혀요.</p>';
+        }
+        h+='<div class="pop-foot"><button class="btn" onclick="closePop()">닫기</button></div>';
+        openPop(h);
+      }});
+    });
+    pl.appendChild(paraCard('본론 '+(i+1)+' — 이유와 근거','var(--reason)', chips,
+      state.ws.paras.bodies[i]||'','첫째, 둘째… 이유를 쓰고 근거를 이어 붙여요. 인용하면 출처도 밝혀요',
+      function(v){ state.ws.paras.bodies[i]=v; }));
+  });
+  pl.appendChild(paraCard('결론 — 요약과 강조','var(--claim)',
+    [],
+    state.ws.paras.conc,'내용을 요약하고 주장을 다시 한번 강조해요',
+    function(v){ state.ws.paras.conc=v; }));
+}
+document.getElementById('toStep5').addEventListener('click', function(){
+  const p=state.ws.paras;
+  const empty = !p.intro.trim() || !p.conc.trim() || state.ws.reasons.some(function(_,i){ return !(p.bodies[i]||'').trim(); });
+  if (empty){ toast('모든 문단을 채워 주세요. 짧아도 괜찮아요.'); return; }
+  state.ws.maxStep=Math.max(state.ws.maxStep,5); gotoStep(5);
+});
+
+/* ----- 5단계 고쳐쓰기 ----- */
+function joinedDraft(){
+  const p=state.ws.paras;
+  const parts=[p.intro.trim()];
+  state.ws.reasons.forEach(function(_,i){ parts.push((p.bodies[i]||'').trim()); });
+  parts.push(p.conc.trim());
+  return parts.filter(Boolean).join('\n\n');
+}
+const CHECKS=[
+  '서론에 문제 상황과 나의 주장이 드러나나요?',
+  '이유가 주장과 관련이 있나요?',
+  '근거가 누가 보아도 확인할 수 있는 객관적인 자료인가요?',
+  '인용한 자료의 출처(누가·언제·자료명·실린 곳)를 밝혔나요?',
+  '결론에서 내용을 요약하고 주장을 강조했나요?'
+];
+const SCALE=['고쳐야 해요','조금 아쉬워요','잘 되었어요'];
+function renderPolish(){
+  state.ws.firstDraft=joinedDraft();
+  document.getElementById('polishTitleEcho').textContent = state.ws.title.trim() ? '— 「'+state.ws.title.trim()+'」' : '';
+  const fd=document.getElementById('firstDraftView');
+  fd.value = (state.ws.finalText||'').trim() ? state.ws.finalText : state.ws.firstDraft;
+  if (!fd.dataset.bound){
+    fd.dataset.bound='1';
+    fd.addEventListener('input', function(){ state.ws.finalText=fd.value; saveLocal(); });
+  }
+  // 충족 현황
+  const ful=document.getElementById('fulfilList');
+  ful.innerHTML='';
+  fulfilItems().forEach(function(f){
+    const d=document.createElement('div'); d.className='fi';
+    d.innerHTML='<span class="fic">'+f.icon+'</span><span>'+esc(f.text)+'</span>';
+    ful.appendChild(d);
+  });
+  // 점검 기준 — 다섯 항목을 한 번에 보고 각각 답함
+  const cl=document.getElementById('checkList'); cl.innerHTML='';
+  CHECKS.forEach(function(q,qi){
+    const item=document.createElement('div'); item.className='check-item';
+    item.innerHTML='<span class="ci-q">'+(qi+1)+'. '+esc(q)+'</span>';
+    const row=document.createElement('div'); row.className='ci-scale';
+    SCALE.forEach(function(lab, si){
+      const b=document.createElement('button');
+      b.textContent=lab;
+      if (state.ws.checks[qi]===si+1) b.classList.add('sel'+(si+1));
+      b.addEventListener('click', function(){
+        state.ws.checks[qi]=si+1; saveLocal();
+        row.querySelectorAll('button').forEach(function(x,xi){ x.className=''; if (xi===si) x.classList.add('sel'+(si+1)); });
+      });
+      row.appendChild(b);
+    });
+    item.appendChild(row);
+    cl.appendChild(item);
+  });
+}
+function fulfilItems(){
+  const rn=state.ws.reasons.filter(function(r){ return r.text.trim(); }).length;
+  const en=countEvid(), sn=countSrc();
+  const noEvid=state.ws.reasons.some(function(r){ return r.text.trim() && !r.evids.some(function(e){return e.text.trim();}); });
+  return [
+    { icon: rn>=2?'✅':'🔶', text:'이유 '+rn+'개 (2~3개가 알맞아요)' },
+    { icon: !noEvid&&en>0?'✅':'🔶', text:'근거 '+en+'개 — '+(noEvid?'근거 없는 이유가 있어요':'모든 이유에 근거가 붙었어요') },
+    { icon: en>0&&sn===en?'✅':'🔶', text:'출처 확인 도장 '+sn+' / '+en+(sn<en?' — 출처가 빠진 근거가 있어요':'') },
+    { icon:'📝', text:'글 길이 '+state.ws.firstDraft.length+'자' }
+  ];
+}
+/* ----- 제출 ----- */
+document.getElementById('inTitle').addEventListener('input', function(){ state.ws.title=this.value; saveLocal(); });
+document.getElementById('inLearned').addEventListener('input', function(){ state.ws.learned=this.value; saveLocal(); });
+
+document.getElementById('btnSubmit').addEventListener('click', function(){
+  state.ws.finalText=document.getElementById('firstDraftView').value;
+  if (state.ws.checks.some(function(c){ return c===0; })){ toast('점검 기준 다섯 가지에 모두 답해 주세요.'); return; }
+  if (!state.ws.title.trim()){ toast('글 제목이 비어 있어요. 3단계(내용 조직하기)에서 지어 주세요.'); return; }
+  if (state.ws.finalText.trim().length<80){ toast('글을 조금 더 다듬어 주세요. (80자 이상)'); return; }
+  if (state.ws.learned.trim().length<15){ toast('알게 된 점을 15자 이상 적어 주세요.'); return; }
+  if (state.ws.checks.some(function(c){ return c===1; }) && state.ws.finalText===state.ws.firstDraft){
+    toast('"고쳐야 해요"라고 답한 부분을 글에서 고친 뒤 제출해요. ✏️'); return;
+  }
+  openFinalInquiry(document.getElementById('btnSubmit'));
+});
+
+/* 마지막 생각: 처음 생각과 나란히 보고 다시 답하기 */
+function openFinalInquiry(btn){
+  const q=conceptText('탐구 질문')||'설득력 있는 주장하는 글은 어떻게 쓸까? 이걸 알면 왜 좋을까?';
+  openPop(
+    '<h2>🔍 탐구 질문, 다시 만나기</h2>'+
+    '<p class="lesson-text" style="font-size:22px;text-align:center">'+esc(q)+'</p>'+
+    inquiryThoughts().map(function(t){ return '<div class="example-para"><b>'+t.label+'</b>'+esc(t.text)+'</div>'; }).join('')+
+    '<p style="font-size:19px;color:var(--mut)">글을 다 써 본 지금, 너의 생각은 어떻게 자랐을까? (15자 이상)</p>'+
+    '<div class="inq-box"><textarea id="inqFinal" placeholder="지금의 내 생각을 적어요">'+esc(state.inquiry.final||state.inquiry.current||'')+'</textarea></div>'+
+    '<div class="pop-foot"><button class="btn gold" id="inqFinalBtn" disabled>생각 완성, 제출! 🏅</button></div>',
+    { closeable:true }
+  );
+  const ta=document.getElementById('inqFinal'), ok=document.getElementById('inqFinalBtn');
+  function upd(){ ok.disabled=ta.value.trim().length<15; }
+  ta.addEventListener('input', upd); upd();
+  ok.addEventListener('click', function(){
+    state.inquiry.final=ta.value.trim(); saveLocal();
+    closePop(); doSubmit(btn);
+  });
+}
+
+async function doSubmit(btn){
+  btn.disabled=true; btn.textContent='제출하는 중...';
+
+  state.ws.submitted=true;
+  const payload={
+    no:state.student.no, name:state.student.name,
+    quizDone:state.quiz.done, quizRate:quizRate(), quizCorrect:state.quiz.correct, quizTotal:state.quiz.total,
+    weak: state.quiz.done ? (state.quiz.weak||'-') : '-',
+    problem:state.ws.problem, reader:state.ws.reader, claim:state.ws.claim,
+    reasonCount:state.ws.reasons.filter(function(r){return r.text.trim();}).length,
+    evidenceCount:countEvid(), sourceCount:countSrc(),
+    title:state.ws.title, firstDraft:state.ws.firstDraft, finalDraft:state.ws.finalText,
+    selfCheck: CHECKS.map(function(q,i){ return (i+1)+'. '+SCALE[(state.ws.checks[i]||1)-1]; }).join(' / '),
+    learned:state.ws.learned,
+    inquiryFirst: state.inquiry.q1 || '-',
+    inquiryFinal: state.inquiry.final || '-',
+    progressLabel:'완성!'
+  };
+  let savedNote='';
+  try {
+    if (MODE.type==='gas'){ await 서버호출('saveResultFromApp', payload); savedNote='선생님 시트에 저장되었어요.'; }
+    else if (LINKED){
+      const d = await jsonp({ action:'save', data: JSON.stringify(payload) });
+      if (!d || !d.ok) throw new Error();
+      savedNote='선생님 시트에 저장되었어요.';
+    } else {
+      savedNote='체험 모드예요. 선생님이 구글 시트를 연결하면 저장돼요.';
+    }
+  } catch(e){
+    savedNote='저장에 실패했어요. 화면을 캡처해 두고 선생님께 알려 주세요.';
+  }
+  btn.disabled=false; btn.textContent='완성! 제출하기 🏅';
+  clearLocal(state.student.no); // 완주하면 처음부터 다시 시작할 수 있게 리셋
+  confetti();
+  document.getElementById('resultSaveNote').textContent=savedNote;
+  renderResult(); renderHome(); show('scr-result');
+}
+
+/* ----- 결과 화면 ----- */
+function renderResult(){
+  const qb=document.getElementById('resultQuizBox');
+  if (state.quiz.done){
+    qb.innerHTML='<span>판별 정답률 <b class="num" style="color:var(--claim-deep)">'+quizRate()+'%</b> ('+state.quiz.correct+'/'+state.quiz.total+')</span>'+
+      (state.quiz.weak?'<span>더 연습할 부분 — <b>'+esc(state.quiz.weak)+'</b></span>':'<span style="color:var(--ok)">모든 유형 완벽 판별!</span>');
+  } else {
+    qb.innerHTML='<span>아직 근거 탐정을 하지 않았어요. 도전해 보면 근거 보는 눈이 자라요! 🕵️</span>';
+  }
+  const rf=document.getElementById('resultFulfil'); rf.innerHTML='';
+  fulfilItems().forEach(function(f){
+    const d=document.createElement('div'); d.className='fi';
+    d.innerHTML='<span class="fic">'+f.icon+'</span><span>'+esc(f.text)+'</span>';
+    rf.appendChild(d);
+  });
+  const ri=document.getElementById('resultInquiry');
+  const th=inquiryThoughts();
+  ri.innerHTML = th.length
+    ? th.map(function(t,i){
+        const last=i===th.length-1;
+        return '<div class="example-para" style="border-color:'+(last?'var(--claim)':'var(--line)')+'"><b>'+t.label+'</b>'+esc(t.text)+'</div>';
+      }).join('')
+    : '<div class="example-para"><b>생각 기록</b>(적지 않았어요)</div>';
+  document.getElementById('resultTitle').textContent='「'+(state.ws.title||'제목 없음')+'」 — '+(state.student?state.student.name:'');
+  document.getElementById('resultText').textContent=state.ws.finalText||state.ws.firstDraft||'';
+}
+
+/* ----- 도움말 팝업 (설명 + 예시 함께) ----- */
+const HELPS={
+  step1:{ t:'1단계 · 계획하기', body:
+    '<p>글의 <b>목적</b>(설득)을 생각하며, <b>어떤 문제</b>에 대해 <b>누구에게</b> 무엇을 주장할지 계획해요.</p>'+
+    '<p>주장은 <b>한 문장</b>으로 분명하게! 보통 <b>"~해야 한다", "~하자"</b>로 끝나요.</p>' },
+  step2:{ t:'2단계 · 내용 생성하기', body:
+    '<p>주장을 뒷받침할 <b>이유를 2~3개</b> 세우고, 이유마다 <b>근거</b>를 붙여요.</p>'+
+    '<p>⚠️ 이유는 나의 까닭(주관적), <b>근거는 누가 보아도 확인할 수 있는 객관적인 자료</b>예요. 느낌이나 상상은 근거가 될 수 없어요.</p>'+
+    '<p>근거의 <b>출처 네 칸</b>(누가·언제·자료명·실린 곳)을 모두 채우면 출처 확인 도장이 쾅!</p>' },
+  step3:{ t:'3단계 · 내용 조직하기', body:
+    '<p>주장·이유·근거가 어떻게 이어지는지 <b>논리 지도</b>로 확인해요.</p>'+
+    '<p>출처를 밝히지 않은 근거는 흐리게 보여요. 그리고 <b>서론·결론</b>에 넣을 내용을 메모해 짜임을 완성해요.</p>' },
+  step4:{ t:'4단계 · 표현하기', body:
+    '<p>조직한 내용을 옆에 두고 <b>문단별</b>로 써요.</p>'+
+    '<p>본론 한 문단 = <b>이유 하나 + 근거</b>. 서론에는 문제 상황과 주장을, 결론에는 요약과 강조를 담아요.</p>'+
+    '<p>막히면 <b>문단 도움말</b> 버튼에서 문단의 틀을 볼 수 있어요.</p>' },
+  step5:{ t:'5단계 · 고쳐쓰기', body:
+    '<p><b>점검 기준 5가지</b>에 답하면서, 왼쪽 글을 눌러 <b>그 자리에서 바로</b> 고쳐요.</p>'+
+    '<p>부족한 부분이 보이면 위 단계 번호를 눌러 <b>언제든 되돌아갈 수 있어요.</b> 알게 된 점까지 적으면 제출 완성!</p>' },
+  intro:{ t:'서론 메모 도움말', body:
+    '<p>서론은 글의 <b>첫인상</b>이에요. 읽는 사람이 "어? 이건 나도 겪는 문제인데?" 하고 끌려 들어오게 만들어요.</p>'+
+    '<p>메모에는 아래 세 가지 중 <b>골라서 짧게</b> 적으면 돼요. 완성된 문장이 아니어도 괜찮아요!</p>'+
+    '<div class="example-para"><b>① 문제 상황</b>요즘 어떤 일이 벌어지고 있나요? — 예) 쉬는 시간 복도에서 부딪히는 친구가 많음</div>'+
+    '<div class="example-para"><b>② 눈길 끄는 시작</b>질문·경험·숫자로 시작해 보세요 — 예) "지난주에만 복도에서 3명이 부딪혔다면 믿어지나요?"</div>'+
+    '<div class="example-para"><b>③ 나의 주장 예고</b>그래서 나는 무엇을 말하고 싶은지 — 예) 복도에서는 걸어 다니자고 말할 것</div>'+
+    '<p style="font-size:17px;color:var(--mut)">💡 메모 예시: "복도에서 뛰다 부딪히는 일 많음 / 지난주 3번 / 걸어 다니자고 주장"</p>' },
+  conclusion:{ t:'결론 메모 도움말', body:
+    '<p>결론은 글의 <b>마지막 도장</b>이에요. 읽는 사람 마음에 주장이 꾹 남도록 눌러 찍어요.</p>'+
+    '<p>메모에는 아래 세 가지 중 <b>골라서 짧게</b> 적으면 돼요.</p>'+
+    '<div class="example-para"><b>① 이유 요약</b>본론에서 말한 이유를 한 줄로 — 예) 안전 + 조용한 복도, 두 가지 이유</div>'+
+    '<div class="example-para"><b>② 주장 다시 강조</b>같은 주장을 한 번 더, 조금 다르게 — 예) 복도에서는 꼭 걸어 다니자</div>'+
+    '<div class="example-para"><b>③ 실천 다짐·부탁</b>읽는 사람이 할 일 — 예) 오늘부터 나부터 걸어 다니기, 친구에게도 알려 주기</div>'+
+    '<p style="font-size:17px;color:var(--mut)">💡 새로운 이유를 결론에서 처음 꺼내지 않도록 조심해요. 결론은 정리하는 곳!</p>' },
+  problem:{ t:'문제 상황 도움말', body:
+    '<p>주변에서 <b>불편하거나 바꾸고 싶은 일</b>을 떠올려요. 내가 진짜 바꾸고 싶은 문제일수록 힘 있는 글이 돼요.</p>'+
+    '<div class="example-para"><b>예시</b>쉬는 시간마다 복도에서 뛰다가 부딪히는 친구들이 많다. / 급식에서 남기는 음식이 너무 많다. / 스마트폰 때문에 잠이 부족한 친구들이 많다.</div>' },
+  claim:{ t:'주장 도움말', body:
+    '<p>주장은 <b>한 문장</b>으로, 누가 읽어도 분명하게! 보통 <b>"~해야 한다", "~하자"</b>로 끝나요.</p>'+
+    '<div class="example-para"><b>예시</b>복도에서는 걸어 다녀야 한다. / 급식을 먹을 만큼만 받자. / 스마트폰 사용 시간을 스스로 정해 지키자.</div>' },
+  evidence:{ t:'근거 도움말', body:
+    '<p>⚠️ 이유는 나의 까닭(주관적), <b>근거는 누가 보아도 확인할 수 있는 객관적인 자료</b>예요. 느낌이나 상상은 근거가 될 수 없어요.</p>'+
+    '<p>근거의 네 가지 유형이에요.</p>'+
+    '<div class="example-para"><b>수치 자료</b>○○청소년연구소(2025) 조사에서 하루 4시간 이상 사용하는 학생은 수면이 부족했다.</div>'+
+    '<div class="example-para"><b>전문가 의견</b>뇌과학 전문가 김○○ 박사는 "알림을 확인하면 다시 집중하는 데 오래 걸린다."라고 말했다.</div>'+
+    '<div class="example-para"><b>조사 결과</b>우리 반 설문에서 25명 중 18명이 "잠이 부족하다"라고 답했다.</div>'+
+    '<div class="example-para"><b>책·기사</b>○○신문(2026.3.2.) 기사에 따르면 초등학생의 눈 건강 문제가 늘고 있다.</div>'+
+    '<p style="font-size:17px;color:var(--mut)">인용한 자료는 출처 네 칸(누가·언제·자료명·실린 곳)을 꼭 채워요.</p>' },
+  write:{ t:'문단 쓰기 도움말', body:
+    '<p>글의 짜임 순서대로 눌러 보세요. 본론 한 문단 = <b>표지어 → 이유 → 근거 → 정리</b>!</p>'+
+    '<div class="example-para"><b>서론의 틀</b>'+
+      '<div class="tpl-line"><span class="tl-tag mut">상황</span><span>(문제 상황을 한두 문장으로 쓴다)</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag claim">주장</span><span>그래서 나는 <b>(주장)</b>이라고 생각한다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag mut">예고</span><span>지금부터 그 이유를 살펴보자.</span></div></div>'+
+    '<div class="example-para"><b>본론 1의 틀</b>'+
+      '<div class="tpl-line"><span class="tl-tag reason">이유</span><span><u>첫째</u>, <b>(이유 1)</b>이기 때문이다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag evid">근거</span><span>실제로 ○○(2025)의 조사에 따르면 ~라고 한다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag mut">정리</span><span><u>따라서</u> (주장과 잇는 한 문장).</span></div></div>'+
+    '<div class="example-para"><b>본론 2의 틀</b>'+
+      '<div class="tpl-line"><span class="tl-tag reason">이유</span><span><u>둘째</u>, <b>(이유 2)</b>이기 때문이다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag evid">근거</span><span>○○ 전문가는 "~"라고 말했다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag mut">정리</span><span><u>이처럼</u> (주장과 잇는 한 문장).</span></div></div>'+
+    '<div class="example-para"><b>본론 3의 틀</b>'+
+      '<div class="tpl-line"><span class="tl-tag reason">이유</span><span><u>셋째</u>, <b>(이유 3)</b>이기 때문이다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag evid">근거</span><span>우리 반 설문에서도 ~라는 결과가 나왔다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag mut">정리</span><span><u>그러므로</u> (주장과 잇는 한 문장).</span></div></div>'+
+    '<div class="example-para"><b>결론의 틀</b>'+
+      '<div class="tpl-line"><span class="tl-tag mut">요약</span><span>지금까지 <b>(이유 요약)</b>을 살펴보았다.</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag claim">강조</span><span>(주장을 다시 한번 힘 있게).</span></div>'+
+      '<div class="tpl-line"><span class="tl-tag mut">다짐</span><span>(실천 다짐 한 문장).</span></div></div>'+
+    '<div class="example-para"><b>표지어 모음 — 골라 쓰면 글이 매끄러워요</b>'+
+      '<div class="mk-row"><b>시작</b><span class="mk">첫째</span><span class="mk">먼저</span><span class="mk">우선</span></div>'+
+      '<div class="mk-row"><b>이어서</b><span class="mk">둘째</span><span class="mk">다음으로</span><span class="mk">또한</span><span class="mk">게다가</span></div>'+
+      '<div class="mk-row"><b>마무리</b><span class="mk">셋째</span><span class="mk">마지막으로</span><span class="mk">끝으로</span></div>'+
+      '<div class="mk-row"><b>정리</b><span class="mk">따라서</span><span class="mk">그러므로</span><span class="mk">이처럼</span><span class="mk">이와 같이</span></div></div>' }
+};
+document.querySelectorAll('[data-help]').forEach(function(b){
+  b.addEventListener('click', function(e){
+    e.stopPropagation();
+    const h=HELPS[b.dataset.help];
+    openPop('<h2>💡 '+esc(h.t)+'</h2>'+h.body+'<div class="pop-foot"><button class="btn" onclick="closePop()">알겠어요</button></div>');
+  });
+});
+document.querySelectorAll('[data-back]').forEach(function(b){
+  b.addEventListener('click', function(){ gotoStep(Number(b.dataset.back)); });
+});
+
+
+/* ============================================================
+   PDF로 저장 — 같은 양식의 쪽을 만들어 넘치는 내용을 이어 담음
+   ============================================================ */
+function pdfNewPage(area, title, name, pageNo){
+  const pg=document.createElement('div'); pg.className='print-page';
+  pg.innerHTML=
+    '<div class="pp-frame">'+
+    '<div class="pp-head"><span class="pp-badge">주장</span>'+
+    '<span class="pp-meta"><span class="pp-title">'+esc(title)+'</span>'+
+    '<span class="pp-sub">'+esc(name)+' · 국어 6-1 5단원 · 주장하는 글 쓰기 공방</span></span></div>'+
+    '<div class="pp-body"></div>'+
+    '</div>'+
+    '<div class="pp-foot"><span>© 주장하는 글 쓰기 공방</span><span class="pp-num"></span></div>';
+  area.appendChild(pg);
+  return { body: pg.querySelector('.pp-body'), foot: pg.querySelector('.pp-num') };
+}
+function pdfOverflow(body){ return body.scrollHeight > body.clientHeight + 1; }
+function buildPrintPages(text, title, name){
+  const area=document.getElementById('printArea');
+  area.innerHTML='';
+  // 측정을 위해 화면 밖에 실제 크기로 펼쳐 둠
+  area.style.cssText='display:block;position:fixed;left:-9999px;top:0;z-index:-1';
+  const paras=String(text||'').split(/\n+/).map(function(t){ return t.trim(); }).filter(Boolean);
+  if (!paras.length) paras.push('(글이 비어 있어요)');
+  let pageNo=1, page=pdfNewPage(area, title, name, pageNo);
+  const queue=paras.slice();
+  let guard=0;
+  while (queue.length && guard++<2000){
+    const txt=queue.shift();
+    const el=document.createElement('p'); el.textContent=txt;
+    page.body.appendChild(el);
+    if (!pdfOverflow(page.body)) continue;
+    // 넘침: 문단을 되돌리고 처리
+    page.body.removeChild(el);
+    if (page.body.children.length===0){
+      // 빈 쪽에서도 넘치는 긴 문단 → 낱말 단위로 쪼개 채우고 나머지는 다음 쪽으로
+      const words=txt.split(' ');
+      const fit=document.createElement('p'); page.body.appendChild(fit);
+      let used=0;
+      for (let i=0;i<words.length;i++){
+        fit.textContent=(fit.textContent?fit.textContent+' ':'')+words[i];
+        if (pdfOverflow(page.body)){
+          fit.textContent=words.slice(0,i).join(' ');
+          used=i; break;
+        }
+        used=i+1;
+      }
+      if (used===0){ fit.textContent=words[0]||''; used=1; } // 최소 전진 보장
+      const rest=words.slice(used).join(' ');
+      if (rest) queue.unshift(rest);
+    } else {
+      queue.unshift(txt); // 통째로 다음 쪽으로
+    }
+    pageNo++; page=pdfNewPage(area, title, name, pageNo);
+  }
+  // 쪽 번호 채우기
+  const pages=area.querySelectorAll('.print-page');
+  pages.forEach(function(pg,i){ pg.querySelector('.pp-num').textContent=(i+1)+' / '+pages.length+'쪽'; });
+  area.style.cssText=''; // 인쇄 CSS가 이어받음
+}
+function savePdf(){
+  const text = (state.ws.finalText||'').trim() || state.ws.firstDraft || joinedDraft();
+  if (!text.trim()){ toast('저장할 글이 아직 없어요.'); return; }
+  const title = state.ws.title.trim() || '나의 주장하는 글';
+  const name = state.student ? state.student.name : '';
+  buildPrintPages(text, title, name);
+  toast('인쇄 창에서 "PDF로 저장"을 고르세요.');
+  setTimeout(function(){ window.print(); }, 350);
+}
+document.getElementById('btnPdfB').addEventListener('click', function(){
+  state.ws.finalText=document.getElementById('firstDraftView').value; saveLocal();
+  savePdf();
+});
+document.getElementById('btnPdfR').addEventListener('click', savePdf);
+
+/* ---------- 시작 ---------- */
+loadData();
+</script>
+</body>
+</html>
